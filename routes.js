@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const { Vendor , User} = require('./models/models.js');
+const { Vendor , User, Items } = require('./models/models.js');
 const mongoose = require('mongoose')
+const oauth = require('./oauth.js')
+const Oauth2Stratergy = require('passport-oauth2')
 require('dotenv').config()
 const DB = process.env.DB
 
-
 mongoose.set('strictQuery',true) //used this for depreciation warning
 
+//connecting to database 
 mongoose.connect(DB,{useNewUrlParser : true})
    .then(() => console.log("Database connected"))
    .catch((err) => console.log(err))
-
 
 // Home page route.
 router.get('/', (req, res) => {
@@ -32,11 +33,15 @@ router.get('/vendor/login', (req, res) => {
 });
 
 router.get('/vendor/dashboard', (req, res) => {
-    res.render('venDas');
-});
+  
+     res.render('venDas');
+   
+})
 
-router.get('/vendor/viewmenu', (req, res) => {
-    res.render('venMen');
+router.get('/vendor/menu', (req, res) => {
+    Items.find({}).then((x)=>{
+    res.render('venMen', {data:x})
+})
 });
 
 router.get('/vendor/credit', (req, res) => {
@@ -67,7 +72,7 @@ router.get('/users/orders ', (req,res) => {
     res.render('usOrd')
 })
 
-
+//registers vendor
 router.post("/venReg",async (req,res) => {
     const VendorData = { 
         name : req.body.name,
@@ -81,8 +86,7 @@ router.post("/venReg",async (req,res) => {
      
 })
 
-
-
+//checks authentication for vendor
 router.post("/venLog",async (req,res) => {
    try{ 
     const user = await Vendor.findOne({username: req.body.username})
@@ -95,10 +99,13 @@ router.post("/venLog",async (req,res) => {
             res.send("authentication succesful")
         }
     }
-    else { console.log('user does not exists')}
+    else { res.send('user does not exists')}
    
 }
 catch(error){}
 })
+
+
+router.get('/channeli', oauth)
 
 module.exports = router;

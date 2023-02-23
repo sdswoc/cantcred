@@ -2,7 +2,7 @@ const express = require('express') //imports express
 const app = express() //makes app
 
 const  routes  = require('./routes.js') //imports routes
-
+const oauth = require('./oauth.js')
 const hbs = require('hbs') //imports handlebars 
 hbs.registerPartials(__dirname + '/views/partials', (err) => {}); // registers partials for handlebars
 app.set('view engine', 'hbs'); //sets view engine to handlebars
@@ -15,6 +15,7 @@ app.use(express.json())  //sends data in form of json objects
 app.use(express.urlencoded({extended:false}))  //body parser
 
 app.use('/',routes) //calls routes
+app.use('/channeli', oauth) //calls oauth
 
 //listens to port
 app.listen(port , () =>{
