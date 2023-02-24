@@ -12,22 +12,31 @@ const vendorDetailsSchema = new mongoose.Schema({
 
 const Vendor =  mongoose.model('vendor', vendorDetailsSchema)
 
-const userDetailSchema = new mongoose.Schema({
-    name : String,
-    enr : String ,
+const userVerifySchema = new mongoose.Schema({
+    name :{type : String},
+    enr : {type : String, unique: true , index: true},
 })
 
+const userDetailsSchema = new mongoose.Schema({
+    name :{type : String},
+    enr : {type : String},
+    email : {type : String,default:""},
+    mob : {type : String, default:""},
+    password : {type: String, default:""}
+})
+
+
 const itemSchema = new mongoose.Schema({
-    vendorname: {type: String , default:Vendor.name},
+    vendorname: {type: String , default:""},
     itemname: String,
     itemprice : Number,
     avail : Boolean
 })
 
-//const Vendor =  mongoose.model('vendor', vendorDetailsSchema)
-const User = mongoose.model('user',userDetailSchema)
+const User =  mongoose.model('user', userDetailsSchema)
+const Ver = mongoose.model('ver',userVerifySchema)
 const Items = mongoose.model('items',itemSchema)
 
 module.exports = { 
-    Vendor, User , Items
+    Vendor, Ver , Items ,User
 }
