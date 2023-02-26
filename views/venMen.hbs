@@ -1,3 +1,44 @@
-vendor menu page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Menu</title>
+</head>
+<body>
+    vendor menu page
 <br>
-welcome {{nm}}
+{{nm}}
+<br>
+
+<div>
+</div>
+<div id="add">
+    <form method="POST" action="/itemadd">
+            <label for="">Item Name</label>
+            <input type="text" name="itemname" id="" required><br>
+            <label for="">Item Price</label>
+            <input type="text" name="itemprice" id="" required><br>
+            <input type="submit" value="Add Item">
+        </form>
+</div>
+these are the items :
+<hr>
+
+{{#if items}}
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Price </th>
+  </tr>
+  {{#each items}}
+  <tr>
+    <td>{{this.itemname}}</td>
+    <td>{{this.itemprice}}</td>
+  </tr>
+  {{/each}}
+</table>
+{{/if}}
+</body>
+</html>

@@ -3,6 +3,7 @@ const app = express()
 const router = express.Router();
 const { Vendor , Ver, Items, User } = require('./models/models.js');
 const mongoose = require('mongoose')
+const Swal = require('sweetalert2')
 require('dotenv').config()
 const DB = process.env.DB
 
@@ -34,24 +35,46 @@ router.post("/venReg",async (req,res) => {
     res.render('venDas')
 })
 
-//checks authentication for vendor
+//checks authentication for vendor and then displays menu 
 router.post("/venLog",async (req,res) => {
-    const user = await Vendor.findOne({username: req.body.username})
+    const user = await Vendor.findOne({username: req.body.username })
     if (user) {
-        console.log("user exists")
-        const pass = await Vendor.findOne({password : req.body.password})
-        if (pass)
-        {
-            nm = req.body.username
-            console.log(nm)
-            console.log("Correct password")
-            res.render('venMen', {nm})
-        }
+        const flag = await Vendor.findOne({flag:true}) 
+        if (flag){
+            const pass = await Vendor.findOne({password : req.body.password})
+            if (pass){
+                nm = "Welcome " +req.body.username
+                Items.find({} , (err, items) => { 
+                    if(err){
+                        console.log(err)}
+                    else {
+                        router.post("/itemadd" , async(req,res) =>{
+                            const ItemData = {
+                                itemname:req.body.itemname,
+                                itemprice:req.body.itemprice
+                            }
+                            Swal.fire({'Added!'})
+                            await Items.insertMany([ItemData])    
+                            res.send("Item Succesfully Added")
+                        })
+                        res.render ("venMen" , {items , nm})}
+                })
+            }
         else  {res.send("wrong password")}
+        }
+        else {res.send("Vendor not verified")}
     }
-    else { res.send('vendor does not exists')}
-   
-})
+    else { res.send("vendor does not exists")
+}})
+
+/*router.post("/itemadd" , async(req,res) =>{
+    const ItemData = {
+        itemname:req.body.itemname,
+        itemprice:req.body.itemprice
+    }
+    await Items.insertMany([ItemData])
+})*/
+
 
 router.post("/usReg", async (req,res) =>{
     const UserData = {
@@ -88,7 +111,6 @@ router.post("/usLog" , async (req,res) =>{
     else { res.send('user does not exists')}
 })
 
-
 // About page route.
 router.get('/about', (req, res) => {
   res.render('about')
@@ -106,12 +128,6 @@ router.get('/vendor', (req, res) => {
   
      res.render('venDas');
    
-})
-
-router.get('/vendor/menu', async (req, res) => {
-    res.render('venMen')
-    const data = await Items.find({},{"itemname" : 1})
-    console.log(data)
 })
 
 router.get('/vendor/credit', (req, res) => {
