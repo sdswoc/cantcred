@@ -53,7 +53,7 @@ router.post("/venLog",async (req,res) => {
                                 itemname:req.body.itemname,
                                 itemprice:req.body.itemprice
                             }
-                            Swal.fire({'Added!'})
+                            Swal.fire({text : 'Added!'})
                             await Items.insertMany([ItemData])    
                             res.send("Item Succesfully Added")
                         })
@@ -159,7 +159,8 @@ router.get('/users/dashboard', (req, res) => {
 });
 
 router.get('/users/menu', (req, res) => {
-    res.render('usMen');
+    Items.find({} , (err, items) => { 
+      res.render('usMen', {items});})
 });
 
 router.get('/users/checkout', (req, res) => {

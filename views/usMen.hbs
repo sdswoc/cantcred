@@ -1,1 +1,17 @@
 user menu page
+{{#if items}}
+<table>
+  <tr>
+    <th>Vendor Name</th>
+    <th>Name</th>
+    <th>Price </th>
+  </tr>
+  {{#each items}}
+  <tr>
+    <td>{{this.vendorname}}</td>
+    <td>{{this.itemname}}</td>
+    <td>{{this.itemprice}}</td>
+  </tr>
+  {{/each}}
+</table>
+{{/if}}
