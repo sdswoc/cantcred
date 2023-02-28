@@ -1,17 +1,39 @@
 user menu page
-{{#if items}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Menu</title>
+  <style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+  
+<h1>User Menu</h1>
+    {{#if items}}
 <table>
   <tr>
     <th>Vendor Name</th>
-    <th>Name</th>
+    <th>Item Name</th>
     <th>Price </th>
+    <th>Availability</th>
   </tr>
   {{#each items}}
   <tr>
     <td>{{this.vendorname}}</td>
     <td>{{this.itemname}}</td>
     <td>{{this.itemprice}}</td>
+    <td>{{this.avail}}</td>
   </tr>
   {{/each}}
 </table>
 {{/if}}
+</body>
+</html>
+
+

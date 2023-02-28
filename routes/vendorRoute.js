@@ -12,19 +12,6 @@ router.use(express.urlencoded({extended:false}))  //body parse
 
 router.use(express.static(__dirname))
 
-//cookie and sessionss
-router.use(cookieParser())
-const oneMonth = 1000 * 60 * 60 * 24 * 30;
-router.use(sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,
-    cookie: { maxAge: oneMonth },
-    resave: false 
-}));
-
-
-
-
 
 //used for registration of vendor 
 router.post("/venReg",async (req,res) => {
@@ -49,10 +36,10 @@ router.post("/venLog",async (req,res) => {
         if (flag){
             const pass = await Vendor.findOne({password : req.body.password})
             if (pass){
-                req.session.userid =req.body.username
+                req.session.vendorid =req.body.username
                 console.log(req.session)
-                console.log(req.session.userid)
-                nm = "Welcome " +req.session.userid
+                console.log(req.session.vendorid)
+                nm = "Welcome " +req.session.vendorid
                 res.render('venDas' , {nm})
             }
         else  {res.send("wrong password")}
@@ -67,35 +54,42 @@ router.post("/venLog",async (req,res) => {
 
 //used for showing menu to vendor and also adding items 
 router.get("/menu" , (req,res) => {
-if (req.session.userid != null){
+if (req.session.vendorid != null){
     Items.find({} , (err, items) => { 
     if(err){
         console.log(err)}
     else {
-        nm = "Welcome " +req.session.userid
-        router.post("/itemadd" , async(req,res) =>{
-        console.log(req.session.userid)
-        const ItemData = {
-            vendorname: req.session.userid,
-            itemname:req.body.itemname,
-            itemprice:req.body.itemprice
-            }
-            Swal.fire({text : 'Added!'})
-            await Items.insertMany([ItemData])    
-            res.send("Item Succesfully Added")
-        })
-      res.render ("venMen" , {items , nm})}
+        nm = "Welcome " +req.session.vendorid
+        res.render ("venMen" , {items , nm}) }
     })
 }
 else {
-    res.render('venLog')
+    res.render('venHom')
 }
 })
+
+router.post("/itemadd" , async(req,res) =>{
+    
+    const ItemData = {
+        vendorname: req.session.vendorid,
+        itemname:req.body.itemname,
+        itemprice:req.body.itemprice
+        }
+        Swal.fire({text : 'Added!'})
+        await Items.insertMany([ItemData])    
+        Items.find({} , (err, items) => { 
+            if(err){
+                console.log(err)}
+            else {
+                nm = "Welcome " +req.session.vendorid
+                res.render ("venMen" , {items , nm}) }
+            })
+ })
 
 
 
 router.get('/logout' , (req,res) => {
-    if (req.session.userid != null){
+    if (req.session.vendorid != null){
     req.session.destroy();
     res.render("venHom")}
     else {res.render("venLog")}
@@ -105,7 +99,7 @@ router.get('/logout' , (req,res) => {
 
 
 router.get('/register' , (req,res) => {
-    if (req.session.userid == null){
+    if (req.session.vendorid == null){
     res.render('venReg')}
     else {res.render('venDas')}
 })
@@ -114,7 +108,7 @@ router.get('/register' , (req,res) => {
 
 
 router.get('/login', (req, res) => {
-    if (req.session.userid == null){
+    if (req.session.vendorid == null){
     res.render('venLog');}
     else {res.render('venDas')}
 });
@@ -123,7 +117,7 @@ router.get('/login', (req, res) => {
 
 
 router.get('/', (req, res) => {
-    if (req.session.userid == null){
+    if (req.session.vendorid == null){
   res.render('venHom'); }
   else {res.render('venDas')}
 })
@@ -132,19 +126,53 @@ router.get('/', (req, res) => {
 
 
 router.get('/credits', (req, res) => {
-    if (req.session.userid != null){
+    if (req.session.vendorid != null){
     res.render('venCrd');}
-    else {res.render('venLog')}
+    else {res.render('venHom')}
 });
 
 
 
 
 router.get('/orders', (req, res) => {
-    if (req.session.userid != null){
+    if (req.session.vendorid != null){
     res.render('venOrd');}
-    else {res.render('venLog')}
+    else {res.render('venHom')}
 });
+
+
+
+router.get('/itemadd', (req,res) =>{
+    if(req.session.vendorid != null){
+        res.render('itemadd')
+    }
+    else{
+        res.render('venHom')
+    }
+})
+
+
+router.post('/delete/:id' , async (req,res) =>{
+    if(req.session.vendorid != null){
+    try {
+        await Items.remove({_id: req.params.id})
+        Items.find({} , (err, items) => { 
+            if(err){
+                console.log(err)}
+            else {
+                nm = "Welcome " +req.session.vendorid
+                res.render ("venMen" , {items , nm}) }
+            })
+    } catch (err) {
+        console.log(err)
+    }}
+    else {
+        res.render('venHom')
+    }   
+    })
+
+
+
 
 
 

@@ -1,0 +1,5 @@
+passport.authenticate('oauth2', { failureRedirect: '/usHom' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/usHom');
+  });

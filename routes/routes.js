@@ -9,7 +9,7 @@ const OAuth2Strategy = require('passport-oauth2')
 const XMLHttpRequest = require("xhr2");
 const Http = new XMLHttpRequest();
 const Swal = require('sweetalert2');
-const { session } = require('passport');
+const session = require('express-session')
 require('dotenv').config()
 const DB = process.env.DB
 
@@ -19,6 +19,7 @@ router.use(express.json())  //sends data in form of json objects
 router.use(express.urlencoded({extended:false}))  //body parse
 
 router.use(express.static(__dirname))
+
 
 
 
@@ -38,11 +39,15 @@ router.get('/about', (req, res) => {
 
 
 
+
   //Verification process starts
 router.get("/channeli", passport.authenticate("oauth2"));
-router.get("/channeli/callback" ,  passport.authenticate('oauth2', 
-{ failureRedirect: '/' }
-));
+router.get("/callback" ,passport.authenticate('oauth2', { failureRedirect: '/usHom' , session:false}),
+function(req, res) {
+  // Successful authentication, redirect home. set cookies
+ res.redirect('/home');
+ 
+});
 passport.use(
     new OAuth2Strategy(
       {
@@ -50,7 +55,7 @@ passport.use(
         tokenURL: "https://channeli.in/open_auth/token/",
         clientID: process.env.ID,
         clientSecret: process.env.SECRET,
-        callbackURL: "http://localhost:4000/channeli/callback",
+        callbackURL: "http://localhost:4000/callback",
       },
        (accessToken, refreshToken, profile, cb) =>{
         const url = `https://channeli.in/open_auth/get_user_data/`;
@@ -63,7 +68,8 @@ passport.use(
             console.log(data);
             const UserData = { enr: data.student.enrolmentNumber , name : data.person.fullName}
             Ver.insertMany([UserData])
-            }
+            return cb(null,Http.responseText)
+          }
           }
         }
     )

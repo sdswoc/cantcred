@@ -3,7 +3,10 @@ const app = express() //makes app
 require('dotenv').config() // ensures .env is used in index.js
 const port = process.env.PORT  //stores the port
 const DB = process.env.DB
+const scr = process.env.SCR
 const mongoose = require('mongoose')
+const session = require('express-session')
+const cookieParser = require('cookie-parser')
 
 mongoose.set('strictQuery',true) //used this for depreciation warning
 
@@ -11,6 +14,16 @@ mongoose.set('strictQuery',true) //used this for depreciation warning
 mongoose.connect(DB,{useNewUrlParser : true})
    .then(() => console.log("Database connected"))
    .catch((err) => console.log(err))
+
+app.use(cookieParser())
+   const oneMonth = 1000 * 60 * 60 * 24 * 30;
+   app.use(session({
+       secret: scr,
+       saveUninitialized:false,
+       cookie: { maxAge: oneMonth , httpOnly:true},
+       resave: false 
+}));
+   
 
 
 const  routes  = require('./routes/routes.js') //imports routes
@@ -31,6 +44,9 @@ app.use(express.static(__dirname))
 app.use('/',routes) //calls routes
 app.use('/users' , userRoute) // calls user route
 app.use('/vendor' , vendorRoute) //calls venddor route
+app.get('/home' , (req,res)=>{
+  res.render('usHom')
+} )
 
 //listens to port
 app.listen(port , () =>{

@@ -1,43 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vendor Menu</title>
-</head>
-<body>
-    vendor menu page
-    <br>
-    <span>{{nm}}</span>      
-<br>
-<div>
-</div>
-<div id="add">
-    <form method="POST" action="/vendor/itemadd">
-            <label for="">Item Name</label>
-            <input type="text" name="itemname" id="" required><br>
-            <label for="">Item Price</label>
-            <input type="text" name="itemprice" id="" required><br>
-            <input type="submit" value="Add Item">
-        </form>
-</div>
-these are the items :
-<hr>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
+
+<h6>Vendor's Menu </h6>
+<h3>{{nm}}</h3>
+{{>addbutton}}
+<p>Here are your listed items</p>
 {{#if items}}
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Price </th>
-  </tr>
-  {{#each items}}
-  <tr>
-    <td>{{this.itemname}}</td>
-    <td>{{this.itemprice}}</td>
-  </tr>
-  {{/each}}
-</table>
+    <table class="striped">
+      <thead>
+        <th>Item Name</th>
+        <th>Item Price</th>
+        <th>Availibility</th>
+        <th></th>
+      </thead>
+      <tbody>
+         {{#each items}}
+            <tr>
+              <td>{{itemname}}</td>
+              <td>{{itemprice}}</td>
+              <td><span class="dash-avail">{{avail}}</span></td>
+              <td>             
+              <form action ="/vendor/delete/{{_id}}" method="POST" id="delete-item">
+                 <input type="hidden" name="method" value="DELETE">
+                 <button type="submit" class="btn red">DELETE</button>
+              </form>
+              </td>
+            </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+{{else}}
+     <p>You have not added any items</p>
 {{/if}}
-</body>
-</html>

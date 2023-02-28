@@ -25,7 +25,7 @@ const userDetailsSchema = new mongoose.Schema({
 
 const itemSchema = new mongoose.Schema({
     vendorname: {type: String , default:""},
-    itemname: String,
+    itemname: {type: String, required: true},
     itemprice : Number,
     avail : {type : Boolean, default : true}
 })

@@ -5,22 +5,13 @@ const sessions = require('express-session')
 const { Vendor , Ver, Items, User } = require('./../models/models.js');
 require('dotenv').config()
 const bcrypt = require('bcrypt')
+const session = require('express-session')
 
 router.use(express.json())  //sends data in form of json objects
 router.use(express.urlencoded({extended:false}))  //body parse
 
 router.use(express.static(__dirname))
   
-//cookie functions, sessions functions
-router.use(cookieParser())
-const oneMonth = 1000 * 60 * 60 * 24 * 30;
-router.use(sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,
-    cookie: { maxAge: oneMonth },
-    resave: false 
- }));
-
 var credit= 200;
 
 //registers users
@@ -57,6 +48,7 @@ router.post("/usLog" , async (req,res) =>{
         {
             req.session.userid = req.body.username
             const msg = "welcome " +req.session.userid
+            //set cookie here
             res.render('usDas', {msg, credit})
         }
         else {res.send("wrong password")}
@@ -78,11 +70,11 @@ router.get("/logout" ,(req,res) => {
 
 
 router.get('/home', (req,res) =>{
-    if (req.session.userid == null){
+// if (req.session.userid == null){
     res.render('usHom');}
-    else {const msg = "Welcome " +req.session.userid;
-    res.render('usDas' , {msg})}
-})
+    //else {const msg = "Welcome " +req.session.userid;
+    //res.render('usDas' , {msg})}
+)
 
 
 
@@ -104,7 +96,8 @@ router.get('/register', (req, res,next) => {
     if (req.session.userid == null){
        res.render('usReg');}
     else {
-        res.render('usHom')}
+        msg = "welcome " + req.session.userid
+        res.render('usDas' , {msg})}
 });
 
 
