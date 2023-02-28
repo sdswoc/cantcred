@@ -17,14 +17,24 @@
          {{#each items}}
             <tr>
               <td>{{itemname}}</td>
+
               <td>{{itemprice}}</td>
-              <td><span class="dash-avail">{{avail}}</span></td>
+
+              <td><span class="dash-avail">{{avail}}
+                    <form action ="/vendor/change/{{_id}}" method="POST" id="change-item">
+                    <input type="hidden" name="method" value="CHANGE">
+                    <button type="submit" class="btn green">CHANGE</button>
+                    </form>
+                  </span>
+              </td>
+
               <td>             
               <form action ="/vendor/delete/{{_id}}" method="POST" id="delete-item">
                  <input type="hidden" name="method" value="DELETE">
                  <button type="submit" class="btn red">DELETE</button>
               </form>
               </td>
+
             </tr>
         {{/each}}
       </tbody>

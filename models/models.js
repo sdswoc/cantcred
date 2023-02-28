@@ -19,7 +19,8 @@ const userDetailsSchema = new mongoose.Schema({
     enr : {type : String},
     email : {type : String,default:""},
     mob : {type : String, default:""},
-    password : {type: String, default:""}
+    password : {type: String, default:""},
+    credit :{type: Number, default :200}
 })
 
 

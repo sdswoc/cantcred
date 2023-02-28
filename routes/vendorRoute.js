@@ -75,14 +75,14 @@ router.post("/itemadd" , async(req,res) =>{
         itemname:req.body.itemname,
         itemprice:req.body.itemprice
         }
-        Swal.fire({text : 'Added!'})
-        await Items.insertMany([ItemData])    
+       await Items.insertMany([ItemData])    
         Items.find({} , (err, items) => { 
             if(err){
                 console.log(err)}
             else {
                 nm = "Welcome " +req.session.vendorid
                 res.render ("venMen" , {items , nm}) }
+                Swal.fire({text : 'Added!'})
             })
  })
 
@@ -169,8 +169,32 @@ router.post('/delete/:id' , async (req,res) =>{
     else {
         res.render('venHom')
     }   
-    })
+ })
 
+ router.post('/change/:id' , async(req,res) => {
+    if(req.session.vendorid != null){
+        try {
+            const val = await Items.findOne({_id:req.params.id},{avail:1 , _id:0})
+            if((val.avail) == true){
+                await Items.findByIdAndUpdate({_id : req.params.id},{avail: false})
+            }
+            else {
+                await Items.findByIdAndUpdate({_id : req.params.id},{avail: true})
+            }
+            Items.find({} , (err, items) => { 
+                if(err){
+                    console.log(err)}
+                else {
+                    nm = "Welcome " +req.session.vendorid
+                    res.render ("venMen" , {items , nm}) }
+                })
+        } catch (err) {
+            console.log(err)
+        }}
+        else {
+            res.render('venHom')
+        }   
+ })
 
 
 
