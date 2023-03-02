@@ -6,21 +6,37 @@ const vendorDetailsSchema = new mongoose.Schema({
     name : {type: String, default : ""} ,  
     email : {type: String, default : ""},
     mob : {type: String, default : ""},
-    flag : {type : Boolean , default : false },
-})
-
-const userVerifySchema = new mongoose.Schema({
-    name :{type : String},
-    enr : {type : String, unique: true , index: true}, 
+    isVerified : {type : Boolean , default : false },
+    orders : [
+        {
+            isPaid : {type: Boolean, default :false},
+            isActive : {type: Boolean, default:true},
+            itemname :{type :String, default : ""},
+            itemprice :{type :Number, default:0},
+            quantity : {type: Number, default :0},
+            username : {type :String , default:""},
+            userenr : {type : Number , default: 0}
+        }
+    ]
 })
 
 const userDetailsSchema = new mongoose.Schema({
     name :{type : String},
-    enr : {type : String},
-    email : {type : String,default:""},
-    mob : {type : String, default:""},
-    password : {type: String, default:""},
-    credit :{type: Number, default :200}
+    enr : {type : String , unique: true},
+    email : {type : String,unique: true , default:""},
+    mob : {type : Number, unique:true,  default:0},
+    credit :{type: Number, default :200},
+    orders : [
+            {
+                isPaid : {type: Boolean, default :false},
+                isActive : {type: Boolean, default:true},
+                itemname :{type :String, default : ""},
+                itemprice :{type :Number, default:0},
+                quantity : {type: Number, default :0},
+                vendorname : {type :String , default:""}
+            }
+    ],
+    isVerified :{ type : Boolean , default : false}
 })
 
 
@@ -32,11 +48,10 @@ const itemSchema = new mongoose.Schema({
 })
 
 const User =  mongoose.model('user', userDetailsSchema)
-const Ver = mongoose.model('ver',userVerifySchema)
 const Items = mongoose.model('items',itemSchema)
 const Vendor =  mongoose.model('vendor', vendorDetailsSchema)
 
 
 module.exports = { 
-    Vendor, Ver , Items ,User
+    Vendor , Items ,User
 }

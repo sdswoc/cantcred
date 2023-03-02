@@ -32,9 +32,9 @@ router.post("/venReg",async (req,res) => {
 router.post("/venLog",async (req,res) => {
     const user = await Vendor.findOne({username: req.body.username })
     if (user) {
-        const flag = await Vendor.findOne({flag:true}) 
-        if (flag){
-            const pass = await Vendor.findOne({password : req.body.password})
+        const isVerified = await Vendor.findOne({username: req.body.username ,isVerified:true}) 
+        if (isVerified){
+            const pass = await Vendor.findOne({username: req.body.username ,password : req.body.password})
             if (pass){
                 req.session.vendorid =req.body.username
                 console.log(req.session)
@@ -55,18 +55,23 @@ router.post("/venLog",async (req,res) => {
 //used for showing menu to vendor and also adding items 
 router.get("/menu" , (req,res) => {
 if (req.session.vendorid != null){
-    Items.find({} , (err, items) => { 
+    Items.find({vendorname: req.session.vendorid} , (err, items) => { 
     if(err){
         console.log(err)}
     else {
+        ven = req.session.vendorid
         nm = "Welcome " +req.session.vendorid
-        res.render ("venMen" , {items , nm}) }
+        res.render('venMen' , {items , nm})
+    }
     })
 }
 else {
     res.render('venHom')
 }
 })
+
+
+
 
 router.post("/itemadd" , async(req,res) =>{
     
@@ -76,7 +81,7 @@ router.post("/itemadd" , async(req,res) =>{
         itemprice:req.body.itemprice
         }
        await Items.insertMany([ItemData])    
-        Items.find({} , (err, items) => { 
+        Items.find({vendorname: req.session.vendorid} , (err, items) => { 
             if(err){
                 console.log(err)}
             else {
@@ -156,7 +161,7 @@ router.post('/delete/:id' , async (req,res) =>{
     if(req.session.vendorid != null){
     try {
         await Items.remove({_id: req.params.id})
-        Items.find({} , (err, items) => { 
+        Items.find({vendorname: req.session.vendorid} , (err, items) => { 
             if(err){
                 console.log(err)}
             else {
@@ -171,6 +176,8 @@ router.post('/delete/:id' , async (req,res) =>{
     }   
  })
 
+
+
  router.post('/change/:id' , async(req,res) => {
     if(req.session.vendorid != null){
         try {
@@ -181,7 +188,7 @@ router.post('/delete/:id' , async (req,res) =>{
             else {
                 await Items.findByIdAndUpdate({_id : req.params.id},{avail: true})
             }
-            Items.find({} , (err, items) => { 
+            Items.find({vendorname: req.session.vendorid} , (err, items) => { 
                 if(err){
                     console.log(err)}
                 else {

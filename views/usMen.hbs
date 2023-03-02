@@ -11,6 +11,8 @@
 <body>
   
 <h1>User Menu</h1>
+
+{{>cartbutton}}
     {{#if items}}
 <table>
   <tr>
@@ -22,15 +24,27 @@
   </tr>
   {{#each items}}
   <tr>
-    <td>{{this.vendorname}}</td>
-    <td>{{this.itemname}}</td>
-    <td>{{this.itemprice}}</td>
-    <td>{{this.avail}}</td>
+    <td>{{vendorname}}</td>
+    <td>{{itemname}}</td>
+    <td>{{itemprice}}</td>
+    <td>{{avail}}</td>
+    <!--
+    <td> 
+          <form action ="/users/book/add/{{_id}}" method="POST" id="increase quantity">
+          <input type="number" name="quantity" id="" default="0">
+          <button type="submit" class="btn">update</button>
+            </form>
+    </td>-->
+    
     <td>
+      {{#if avail}}
        <form action ="/users/book/{{_id}}" method="POST" id="book-item">
                  <input type="hidden" name="method" value="BOOK">
                  <button type="submit" class="btn green">ADD TO CART</button>
         </form>
+        {{else}}
+           <a class="btn disabled">ADD TO CART</a>
+        {{/if}}
     </td>
   </tr>
   {{/each}}

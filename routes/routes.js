@@ -25,7 +25,7 @@ router.use(express.static(__dirname))
 
 
 // Home page route.
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   res.render('home');
 });
 
@@ -42,11 +42,29 @@ router.get('/about', (req, res) => {
 
   //Verification process starts
 router.get("/channeli", passport.authenticate("oauth2"));
-router.get("/callback" ,passport.authenticate('oauth2', { failureRedirect: '/usHom' , session:false}),
-function(req, res) {
-  // Successful authentication, redirect home. set cookies
- res.redirect('/home');
- 
+router.get("/callback/" ,passport.authenticate('oauth2', { failureRedirect: '/usHom' , session:false}),
+async (req, res) => {
+  // Successful authentication, redirect to onboarding. set cookies
+ const data = JSON.parse(Http.responseText);
+            console.log(data);
+            const UserData = { 
+              enr: data.student.enrolmentNumber, 
+              name : data.person.fullName, 
+              email: data.contactInformation.emailAddress 
+            }
+            const user = await User.findOne({enr : UserData.enr})
+            if (user)
+            {
+              req.session.userid = user.enr
+              msg = "Welcome " + req.session.userid
+              res.render('usDas', {msg})
+            }
+            else 
+            {
+               User.insertMany([UserData])
+               enrol = UserData.enr
+               res.redirect('/users/onboarding/?enrol=' +enrol );
+            }
 });
 passport.use(
     new OAuth2Strategy(
@@ -65,9 +83,11 @@ passport.use(
         Http.onreadystatechange = function () {
           if (Http.readyState === XMLHttpRequest.DONE && Http.status === 200) {
             const data = JSON.parse(Http.responseText);
-            console.log(data);
-            const UserData = { enr: data.student.enrolmentNumber , name : data.person.fullName}
-            Ver.insertMany([UserData])
+            const UserData = { 
+              enr: data.student.enrolmentNumber, 
+              name : data.person.fullName, 
+              email: data.contactInformation.emailAddress 
+            }
             return cb(null,Http.responseText)
           }
           }

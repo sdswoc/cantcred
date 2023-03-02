@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Cart</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+   <h6>This is your cart</h6>  
+<br>
+
+ {{#if ord}}
+<table>
+  <tr>
+    <th>Vendor Name</th>
+    <th>Item Name</th>
+    <th>Price </th>
+    <th></th>
+  </tr>
+  {{#each ord}}
+     {{#if isActive}}
+  <tr>
+    <td>{{vendorname}}</td>
+    <td>{{itemname}}</td>
+    <td class ="price">{{itemprice}}</td>
+    <td>
+       
+       <form action ="/users/cart/delete/{{_id}}" method="POST" id="delete-item">
+                 <input type="hidden" name="method" value="DELETE">
+                 <button type="submit" class="btn red">DELETE</button>
+              </form>
+    </td>
+  </tr>
+     {{/if}}
+  {{/each}}
+</table>
+{{/if}}
+    Total Price : {{pr}}
+    <br>
+    {{>paybutton}}
+</body>
+</html>
+
+
