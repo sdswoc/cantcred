@@ -1,1 +1,60 @@
-user order page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+</head>
+<body>
+    <h1>
+        Current orders 
+    </h1> 
+    <br>
+    
+ {{#if ord}}
+<table>
+  <tr>
+    <th>Vendor Name</th>
+    <th>Item Name</th>
+    <th>Price </th>
+  </tr>
+  {{#each ord}}
+   {{#if isPaid}}
+    {{#if isActive}}
+  <tr>
+    <td>{{vendorname}}</td>
+    <td>{{itemname}}</td>
+    <td>{{itemprice}}</td>
+  </tr>
+    {{/if}}
+   {{/if}}
+  {{/each}}
+</table>
+{{/if}}
+    <br><br><br>
+    <h1> Past Orders</h1>
+    <br>
+    <table>
+  <tr>
+    <th>Vendor Name</th>
+    <th>Item Name</th>
+    <th>Price </th>
+  </tr>
+  {{#each ord}}
+   {{#if isPaid}}
+    {{#if isActive }}
+     {{else}}
+  <tr>
+    <td>{{vendorname}}</td>
+    <td>{{itemname}}</td>
+    <td>{{itemprice}}</td>
+  </tr>
+    {{/if}}
+   {{/if}}
+  {{/each}}
+</table>
+</body>
+</html>

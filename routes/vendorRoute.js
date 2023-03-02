@@ -208,3 +208,8 @@ router.post('/delete/:id' , async (req,res) =>{
 
 
 module.exports = router
+
+
+
+ // const salt = await bcrypt.genSalt();
+    //const hash = await bcrypt.hash(req.body.password,salt)

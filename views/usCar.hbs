@@ -21,6 +21,9 @@
   </tr>
   {{#each ord}}
      {{#if isActive}}
+       {{#if isPaid}}
+
+       {{else}}
   <tr>
     <td>{{vendorname}}</td>
     <td>{{itemname}}</td>
@@ -33,13 +36,16 @@
               </form>
     </td>
   </tr>
+       {{/if}}
      {{/if}}
   {{/each}}
 </table>
 {{/if}}
     Total Price : {{pr}}
     <br>
-    {{>paybutton}}
+    <br>
+    {{>paybutton}} <br>
+    {{>paynow}}
 </body>
 </html>
 

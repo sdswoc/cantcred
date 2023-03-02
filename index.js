@@ -25,7 +25,6 @@ app.use(cookieParser())
 }));
    
 
-
 const  routes  = require('./routes/routes.js') //imports routes
 const userRoute = require("./routes/userRoute.js") //imports user 
 const vendorRoute = require("./routes/vendorRoute.js") //imports vendor routes

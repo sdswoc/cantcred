@@ -46,7 +46,6 @@ router.get("/callback/" ,passport.authenticate('oauth2', { failureRedirect: '/us
 async (req, res) => {
   // Successful authentication, redirect to onboarding. set cookies
  const data = JSON.parse(Http.responseText);
-            console.log(data);
             const UserData = { 
               enr: data.student.enrolmentNumber, 
               name : data.person.fullName, 
@@ -56,14 +55,16 @@ async (req, res) => {
             if (user)
             {
               req.session.userid = user.enr
-              msg = "Welcome " + req.session.userid
-              res.render('usDas', {msg})
+              enrol = UserData.enr
+              res.redirect('/users/onboarding/?enrol=' +enrol)
             }
             else 
             {
-               User.insertMany([UserData])
-               enrol = UserData.enr
-               res.redirect('/users/onboarding/?enrol=' +enrol );
+               User.insertMany([UserData]).then(() =>{
+                enrol = UserData.enr
+                res.redirect('/users/onboarding/?enrol=' +enrol );
+               })
+               
             }
 });
 passport.use(
