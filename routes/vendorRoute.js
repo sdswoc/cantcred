@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const sessions = require('express-session')
 const { Vendor , Ver, Items, User } = require('./../models/models.js');
 const Swal = require('sweetalert2');
+const { rawListeners } = require('gulp');
 require('dotenv').config()
 const DB = process.env.DB
 
@@ -39,8 +40,8 @@ router.post("/venLog",async (req,res) => {
                 req.session.vendorid =req.body.username
                 console.log(req.session)
                 console.log(req.session.vendorid)
-                nm = "Welcome " +req.session.vendorid
-                res.render('venDas' , {nm})
+                msg = "Welcome " +req.session.vendorid
+                res.render('venDas' , {msg})
             }
         else  {res.send("wrong password")}
         }
@@ -123,7 +124,8 @@ router.get('/login', (req, res) => {
 
 router.get('/', (req, res) => {
     if (req.session.vendorid == null){
-  res.render('venHom'); }
+        msg = "Welcome " + req.session.vendorid
+  res.render('venHom' , {msg}); }
   else {res.render('venDas')}
 })
 
@@ -204,8 +206,77 @@ router.post('/delete/:id' , async (req,res) =>{
  })
 
 
+router.get('/currentorders' , async (req,res) => {
+    if(req.session.vendorid != null){
+    console.log(req.session.vendorid)
+    const user = await User.find({"orders.vendorname" : req.session.vendorid})
+    const len = user.length
+    let curord = []
+    for (let i = 0 ; i< len ; i++)
+    {
+    const ord = user[i].orders
+    let lenord = ord.length
+     for (let j = 0 ; j< lenord ; j++)
+     {
+        if (ord[j].isActive == true && ord[j].isPaid == true)
+        {
+        curord.push(ord[j])
+        }
+     }
+    }
+    console.log(curord)
+    res.render('venCurOrd' , {curord})
+    }
+    else {
+        res.render('venHom')
+    }
+})
 
 
+
+
+
+
+router.post('/complete/:id' ,  async (req,res) =>{
+    if(req.session.vendorid  != null) { 
+    await User.updateMany({'orders._id' : req.params.id} , {'$set' :{
+        'orders.$.isActive' : false }})
+    res.redirect('/vendor/currentorders')
+    } 
+    else {
+        res.render('venHom')
+    }
+} )
+
+
+
+
+
+router.get('/pastorders' , async (req,res) => {
+    if(req.session.vendorid != null){
+        console.log(req.session.vendorid)
+        const user = await User.find({"orders.vendorname" : req.session.vendorid})
+        const len = user.length
+        let pastord = []
+        for (let i = 0 ; i< len ; i++)
+        {
+        const ord = user[i].orders
+        let lenord = ord.length
+         for (let j = 0 ; j< lenord ; j++)
+         {
+            if (ord[j].isActive == false && ord[j].isPaid == true)
+            {
+            pastord.push(ord[j])
+            }
+         }
+        }
+        console.log(pastord)
+        res.render('venPasOrd' , {pastord})
+        }
+        else {
+            res.render('venHom')
+        }
+    })
 
 module.exports = router
 

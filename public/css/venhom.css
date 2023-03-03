@@ -1,0 +1,49 @@
+*{
+    font-family: Helvetica;
+}
+
+body{
+    background-color: black;
+    background-image: url('/public/images/landing\ page.png');
+}
+
+.header{
+    position: relative;
+    color: white;
+    text-align:center;
+    font-size: 500%;
+    
+}
+
+.label{
+    position: relative;
+    color: white;
+    text-align: center;
+    font-size: 200%;
+}
+
+#login{
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+
+#register{
+    text-decoration: none;
+    color:rgb(0, 0, 0)
+}
+
+#login-btn{
+    position: fixed;
+    left:35%;
+    width: 30%;
+    top:40%;
+    height : 7%;
+}
+
+#reg-btn{
+    position: fixed;
+    left:35%;
+    width: 30%;
+    top:48%;
+    height : 7%;
+}

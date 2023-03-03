@@ -19,7 +19,9 @@
   <tr>
     <th>Vendor Name</th>
     <th>Item Name</th>
-    <th>Price </th>
+    <th>Price of each item </th>
+    <th>Quantity</th>
+    <th>Total Price</th>
   </tr>
   {{#each ord}}
    {{#if isPaid}}
@@ -28,6 +30,8 @@
     <td>{{vendorname}}</td>
     <td>{{itemname}}</td>
     <td>{{itemprice}}</td>
+    <td>{{quantity}}</td>
+    <td>{{totalprice}}</td>
   </tr>
     {{/if}}
    {{/if}}
@@ -42,6 +46,8 @@
     <th>Vendor Name</th>
     <th>Item Name</th>
     <th>Price </th>
+    <th>Quantity</th>
+    <th>Total Price</th>
   </tr>
   {{#each ord}}
    {{#if isPaid}}
@@ -51,6 +57,8 @@
     <td>{{vendorname}}</td>
     <td>{{itemname}}</td>
     <td>{{itemprice}}</td>
+    <td>{{quantity}}</td>
+    <td>{{totalprice}}</td>
   </tr>
     {{/if}}
    {{/if}}

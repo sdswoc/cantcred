@@ -20,7 +20,7 @@
     <th>Item Name</th>
     <th>Price </th>
     <th>Availability</th>
-    <th></th>
+    <th>Book</th>
   </tr>
   {{#each items}}
   <tr>
@@ -28,20 +28,11 @@
     <td>{{itemname}}</td>
     <td>{{itemprice}}</td>
     <td>{{avail}}</td>
-    <!--
-    <td> 
-          <form action ="/users/book/add/{{_id}}" method="POST" id="increase quantity">
-          <input type="number" name="quantity" id="" default="0">
-          <button type="submit" class="btn">update</button>
-            </form>
-    </td>-->
+   
     
     <td>
       {{#if avail}}
-       <form action ="/users/book/{{_id}}" method="POST" id="book-item">
-                 <input type="hidden" name="method" value="BOOK">
-                 <button type="submit" class="btn green">ADD TO CART</button>
-        </form>
+        {{>addtocart}}
         {{else}}
            <a class="btn disabled">ADD TO CART</a>
         {{/if}}

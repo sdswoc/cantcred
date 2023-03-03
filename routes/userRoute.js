@@ -1,6 +1,4 @@
 const express =require('express')
-const { MongoUnexpectedServerResponseError } = require('mongodb')
-const mongoose = require('mongoose')
 const router =express.Router()
 const { Vendor , Ver, Items, User } = require('./../models/models.js')
 
@@ -22,17 +20,19 @@ router.get('/' , (req,res) => {
         res.redirect('/users/onboarding/?enrol='+enrol)
     }})
 
-router.get('/onboarding/',  async  (req,res) => {
+router.get('/onboarding/',  async (req,res,next)=>{
+    setTimeout(next,1000)
     if(req.session.userid != null) {
     const enrol = req.query.enrol  
     const user = await User.findOne({enr : enrol})
     if (user.mob == 0) {
-     res.render('usOnb')
+     res.render('usOnb' )
     }
     else {
      req.session.userid = user.enr
      msg = "Welcome " +req.session.userid
-     res.render('usDas' , {msg})
+     const credit = user.credit
+     res.render('usDas' , {msg , credit}  )
     }
     }
     else {
@@ -69,6 +69,7 @@ router.get('/menu', (req, res,next) => {
 });
 
 
+//to show the all orders page 
 router.get('/orders', async (req,res) => {
    if(req.session.userid != null){
       const user = await User.findOne({enr:req.session.userid})
@@ -80,7 +81,7 @@ router.get('/orders', async (req,res) => {
 
 
 
-
+// to show the credits of the user
 router.get('/credits' , async (req,res) =>{
     if(req.session.userid != null){
         const user = await User.findOne({enr : req.session.userid})
@@ -94,48 +95,81 @@ router.get('/credits' , async (req,res) =>{
 
 
 
+router.post('/quantity/:id' , async(req,res) =>{
+    req.session.quantity = req.body.quantity
+    console.log(req.session.quantity)
+})
+
+
+
+
+
+
 // adds orders to the cart of the user
 router.post('/book/:id' , async(req,res) => {
     if(req.session.userid != null){                                                                    //checking if user is logged in
-         const item = await Items.findOne({_id:req.params.id})                                         
-         const user = await User.findOne({enr : req.session.userid})
-         var len = user.orders.length
-         console.log(len)
-         if (len == 0)
-         {
-            await User.updateMany({enr : req.session.userid}, { $push : {                         //adds the first order
-                orders : {
-                    
+        const item = await Items.findOne({_id:req.params.id})                                         
+        const user = await User.findOne({enr : req.session.userid})
+        var len = user.orders.length
+        console.log(req.body.quantity)
+        const totalprice = req.body.quantity * item.itemprice
+        console.log(totalprice)
+        if(req.body.quantity > 0)
+        {
+            if (len == 0){
+               await User.updateMany({enr : req.session.userid}, { $push : {                         //adds the first order
+                   orders : {
                         itemname : item.itemname,
                         itemprice : item.itemprice,
-                        vendorname : item.vendorname
-
+                        vendorname : item.vendorname,
+                        quantity : req.body.quantity,
+                        totalprice: (req.body.quantity)*item.itemprice,
+                        username : user.name,
+                        userenr : user.enr
                     }
+             }})
             }
-            })
-         }
-         else 
-         {
-            if (user.orders[0].vendorname == item.vendorname)
-            {
-                await User.updateMany({enr : req.session.userid}, { $push : {                       //adds other orders only if the vendor is same 
-                    orders : {
-                        
-                            itemname : item.itemname,
-                            itemprice : item.itemprice,
-                            vendorname : item.vendorname
-    
-                        }
+            else {
+
+                if(user.orders[len-1].vendorname == item.vendorname)
+                {
+                    await User.updateMany({enr : req.session.userid}, { $push : {                         //adds the first order
+                        orders : {
+                             itemname : item.itemname,
+                             itemprice : item.itemprice,
+                             vendorname : item.vendorname,
+                             quantity : req.body.quantity,
+                             totalprice: (req.body.quantity)*item.itemprice,
+                             username : user.name,
+                             userenr : user.enr
+                         }
+                  }})   
                 }
-                })
+                else {
+                    if (user.orders[len-1].isActive == false){
+                        await User.updateMany({enr : req.session.userid}, { $push : {                         //adds the first order
+                            orders : {
+                                 itemname : item.itemname,
+                                 itemprice : item.itemprice,
+                                 vendorname : item.vendorname,
+                                 quantity : req.body.quantity,
+                                 totalprice: (req.body.quantity)*item.itemprice,
+                                 username : user.name,
+                                 userenr : user.enr
+                             }
+                      }})   
+                    }
+                    else{
+                        res.send("Can add only one vendor until order is completed")
+                    }
+                }
+              }
+                             
             }
-            else{
-               res.send("can only add one vendor")                                                        //does not add that order 
-            }
- 
-         }
-    }
-    else {
+        else {
+            res.send("add atleast 1 quantity")
+        }}
+        else {
          res.redirect('/')
     }   
  })
@@ -156,9 +190,11 @@ router.post('/cart/delete/:id' ,  async (req,res) =>{
         {
             if(ord[i].isActive == true)
             {
-                pr+= ord[i].itemprice;
+                pr-= ord[i].totalprice;
             }
+            
         }
+        pr = pr * -1
         res.render('usCar' , {ord , pr})
     }
     else { res.redirect('/')}
@@ -180,9 +216,10 @@ router.post('/cart/delete/:id' ,  async (req,res) =>{
     {
         if(ord[i].isActive == true && ord[i].isPaid == false)
         {
-            pr+= ord[i].itemprice;
+            pr+= ord[i].totalprice;
         }
     }
+    req.session.price = pr
     res.render('usCar' , {ord , pr})
     }
     else { 

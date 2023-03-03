@@ -33,7 +33,10 @@ const userDetailsSchema = new mongoose.Schema({
                 itemname :{type :String, default : ""},
                 itemprice :{type :Number, default:0},
                 quantity : {type: Number, default :0},
-                vendorname : {type :String , default:""}
+                totalprice :{type :Number, default:0},
+                vendorname : {type :String , default:""},
+                username : {type :String , default:""},
+                userenr: {type :String , default:""}
             }
     ],
     isVerified :{ type : Boolean , default : false}
