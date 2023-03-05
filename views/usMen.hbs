@@ -6,41 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Menu</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
+  <link rel="stylesheet" href="../public/css/usMen.css">
 </head>
 <body>
-  
-<h1>User Menu</h1>
-
-{{>cartbutton}}
-    {{#if items}}
-<table>
-  <tr>
-    <th>Vendor Name</th>
-    <th>Item Name</th>
-    <th>Price </th>
-    <th>Availability</th>
-    <th>Book</th>
-  </tr>
-  {{#each items}}
-  <tr>
-    <td>{{vendorname}}</td>
-    <td>{{itemname}}</td>
-    <td>{{itemprice}}</td>
-    <td>{{avail}}</td>
-   
-    
-    <td>
-      {{#if avail}}
-        {{>addtocart}}
-        {{else}}
-           <a class="btn disabled">ADD TO CART</a>
-        {{/if}}
-    </td>
-  </tr>
-  {{/each}}
-</table>
-{{/if}}
+  <div class="main">
+<h1>Menu</h1> 
+   <div class="row">
+    {{#each items}}
+    <div class="col s12 m6 l3">
+      <div class="card hoverable">
+        <div class="card-image">
+          {{>imageselector this}}
+         
+        </div>
+         
+        <div class="card-content">
+           <span class="card-title ">{{itemName}}</span>
+          <p>Rs {{itemPrice}}</p>
+          <p>{{>addtocart}}</p>
+        </div>
+      </div>
+      
+    </div>
+    {{/each}}
+  </div>
+</div>
 </body>
 </html>
 

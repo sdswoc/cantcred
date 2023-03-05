@@ -1,1 +1,45 @@
-vendor's credit Page
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Transactions</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+  </head>
+  <body>
+    <h3>Credit Overdue Details</h3>
+    <br />
+
+    {{#if ord}}
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Enrollment</th>
+          <th>Item Name</th>
+          <th>Price </th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+          <th>Date & Time of Order</th>
+        </tr>
+        {{#each ord}}
+          <tr>
+            <td>{{this._id}}</td>
+            <td>{{this.userName}}</td>
+            <td>{{this.userEnr}}</td>
+            <td>{{this.itemName}}</td>
+            <td>{{this.itemPrice}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.totalPrice}}</td>
+            <td>{{formatDate orderedAt "DD-MM-YYYY, HH:mm:ss "}}</td>
+          </tr>
+        {{/each}}
+      </table>
+      {{else}}
+      <h4>No Credit Overdue</h4>
+    {{/if}}
+  </body>
+</html>

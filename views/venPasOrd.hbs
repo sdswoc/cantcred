@@ -1,42 +1,45 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Cart</title>
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-</head>
-<body>
-   <h3>PAST ORDERS</h3>  
-<br>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+  </head>
+  <body>
+    <h3>PAST ORDERS</h3>
+    <br />
 
- {{#if pastord}}
-<table>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Enrollment</th>
-    <th>Item Name</th>
-    <th>Price </th>
-    <th>Quantity</th>
-    <th>Total</th>
-    <th>Date & Time</th>
-  </tr>
-  {{#each pastord}}
-  <tr>
-    <td>{{this._id}}</td>
-    <td>{{this.username}}</td>
-    <td>{{this.userenr}}</td>
-    <td>{{this.itemname}}</td>
-    <td>{{this.itemprice}}</td>
-    <td>{{this.quantity}}</td>
-    <td>{{this.totalprice}}</td> 
-  </tr>
-  {{/each}}
-</table>
-{{/if}}
-</body>
+    {{#if pastord}}
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Enrollment</th>
+          <th>Item Name</th>
+          <th>Price </th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Date & Time</th>
+          <th>Mode of Payment</th>
+        </tr>
+        {{#each pastord}}
+          <tr>
+            <td>{{this._id}}</td>
+            <td>{{this.userName}}</td>
+            <td>{{this.userEnr}}</td>
+            <td>{{this.itemName}}</td>
+            <td>{{this.itemPrice}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.totalPrice}}</td>
+            <td>{{formatDate orderedAt "DD-MM-YYYY, HH:mm:ss "}}</td>
+            <td>{{modeOfPayment}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    {{/if}}
+  </body>
 </html>
-
-

@@ -1,0 +1,21 @@
+:root {
+    --grey : rgba(49, 49, 49,)
+}
+
+
+
+.main{
+    padding-left: 15%;
+}
+
+.header{
+    font-family:Helvetica;
+    color: var(--grey);
+    width: 100%;
+    font-size: 2vh;
+}
+
+.responsive-img{
+    width: 15vh;
+    padding-top: 1.5vh;
+}

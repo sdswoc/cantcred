@@ -1,11 +1,50 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-user dashboard <br>
-{{msg}}
-<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CantCred</title>
+  <link rel="stylesheet"href="../public/css/usDas.css" > 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+</head>
+<body>
+ <div class ="navbar-fixed">
+  <nav>
+    <div class="nav-wrapper purple darken-3">
+      <a href="#!" ><img class="responsive-img" src="../public/images/logo.png"></a>
+      <ul class="right">
+        <li><a href="/users/cart"><i class="material-icons">shopping_cart</i></a></li>
+        <li><a href="/users/profile"><i class="material-icons">account_circle</i></a></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+<div class="main" style="padding-left:15% ; padding-right:15%; padding-top:20px">
+
+<div class="header">Welcome aboard , <span style="font-weight:bold">{{msg}}</span> </div>
+
+
+<br />
+<br><br>
+
 <a href="/users/menu">View menu</a>
+<br />
+<a href="/users/logout"> Log Out</a>
+<br />
+<a href="/users/orders"> View your orders</a>
+<br />
+your credit is
+{{credit}}
+<br />
+<a href="/users/credit"> Refill Credit</a>
 <br>
-<a href = "/users/logout"> Log Out</a>
-<br>
-<a href = "/users/orders"> View your orders</a>
-<br>
-your credit is {{credit}}
+<a href= "/users/credit/transactions">View transaction history</a>
+</div>
+</body>
+</html>
+
+
+
