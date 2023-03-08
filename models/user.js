@@ -22,11 +22,15 @@ const userDetailsSchema = new mongoose.Schema({
       orderedAt: { type: Date, default: "" },
       modeOfPayment: {
         type: String,
-        default: "NA",
-        enum: ["credit", "direct", "NA"],
+        default: "direct",
+        enum: ["credit", "direct"],
       },
       creditOverdue: { type: Boolean, default: true },
-      creditPaidAt : {type : Date , default : ""}
+      creditPaidAt: { type: Date, default: "" },
+      productID: String,
+      priceID: String,
+      vendorAccountID: String,
+      itemID: String,
     },
   ],
 });

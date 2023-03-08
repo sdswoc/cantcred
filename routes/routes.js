@@ -4,6 +4,7 @@ const sessions = require("express-session");
 const router = express.Router();
 const mongoose = require("mongoose");
 const User = require("../models/user.js");
+const Vendor = require("../models/vendor");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth2");
 const XMLHttpRequest = require("xhr2");
@@ -12,7 +13,7 @@ const Swal = require("sweetalert2");
 const session = require("express-session");
 require("dotenv").config();
 const DB = process.env.DB;
-
+const stripe = require("stripe")(process.env.SK);
 router.use(express.json()); //sends data in form of json objects
 router.use(express.urlencoded({ extended: false })); //body parse
 

@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user.js");
 const Items = require("../models/items.js");
-const Vendor = require("../models/vendor.js")
+const Vendor = require("../models/vendor.js");
 require("dotenv").config();
-
+const stripe = require("stripe")(process.env.SK);
+var bodyParser = require("body-parser");
 router.use(express.json()); //sends data in form of json objects
 router.use(express.urlencoded({ extended: false })); //body parse
 
@@ -55,12 +56,12 @@ router.post("/number", ensureLogin, async (req, res) => {
 //dashboard of the user
 router.get("/dashboard", ensureLogin, async (req, res, next) => {
   const user = await User.findOne({ enr: req.session.userid });
-  const vendors = await Vendor.find()
+  const vendors = await Vendor.find();
   var credit = user.credit;
   var name = user.name;
-  var namesplit = name.split(" ")
-  const msg = namesplit[0]
-  res.render("usDas", { msg, credit, vendors });   //make the UI to show cards of vendors
+  var namesplit = name.split(" ");
+  const msg = namesplit[0];
+  res.render("usDas", { msg, credit, vendors }); //make the UI to show cards of vendors
 });
 
 //profile page of the user
@@ -69,8 +70,8 @@ router.get("/profile", ensureLogin, async (req, res) => {
 });
 
 //menu of the user
-router.get("/menu", ensureLogin, (req, res, next) => {
-  Items.find({}, (err, items) => {
+router.get("/menu/", ensureLogin, (req, res, next) => {
+  Items.find({ vendorName: req.query.vendorName }, (err, items) => {
     nm = "welcome " + req.session.userid;
     res.render("usMen", { items, nm });
   });
@@ -83,7 +84,7 @@ router.get("/orders", ensureLogin, async (req, res) => {
   res.render("usOrd", { ord });
 });
 
-// to show the credits of the user, here we store the items paid by credit and delivered in an array ord, we ensure that the credit has not already been paid 
+// to show the credits of the user, here we store the items paid by credit and delivered in an array ord, we ensure that the credit has not already been paid
 router.get("/credit", ensureLogin, async (req, res) => {
   const user = await User.findOne({ enr: req.session.userid });
   const credit = user.credit;
@@ -105,7 +106,7 @@ router.get("/credit", ensureLogin, async (req, res) => {
   res.render("usCre", { credit, ord });
 });
 
-//shows the cart of the user , we determine the price of the items which are only in the cart , to be in cart , order must be not paid , but shall be active 
+//shows the cart of the user , we determine the price of the items which are only in the cart , to be in cart , order must be not paid , but shall be active
 router.get("/cart", ensureLogin, async (req, res) => {
   const user = await User.findOne({
     enr: req.session.userid,
@@ -128,8 +129,7 @@ router.get("/cart", ensureLogin, async (req, res) => {
   }
 });
 
-
-router.get('/credit/transactions' , ensureLogin , async(req,res) => {
+router.get("/credit/transactions", ensureLogin, async (req, res) => {
   const user = await User.findOne({ enr: req.session.userid });
   const credit = user.credit;
   var ord = [];
@@ -151,10 +151,6 @@ router.get('/credit/transactions' , ensureLogin , async(req,res) => {
   res.render("usTra", { credit, ord });
 });
 
-
-
-
-
 //destroys sessoin
 router.get("/logout", (req, res) => {
   req.session.destroy();
@@ -163,13 +159,15 @@ router.get("/logout", (req, res) => {
 
 // adds orders to the cart of the user, we add only the item specified using $push , code can be modified here
 router.post("/book/:id", ensureLogin, async (req, res) => {
-  const item = await Items.findOne({ _id: req.params.id });
-  const user = await User.findOne({ enr: req.session.userid });
-  var len = 0;
-  if (user) {
-    len = user.orders.length;
-  }
-  if (req.body.quantity > 0) {
+  if (req.body.quantity <= 0) {
+  } else {
+    var check = 0;
+    const item = await Items.findOne({ _id: req.params.id });
+    const user = await User.findOne({ enr: req.session.userid });
+    var len = 0;
+    if (user) {
+      len = user.orders.length;
+    }
     if (len == 0) {
       await User.updateMany(
         { enr: req.session.userid },
@@ -184,12 +182,26 @@ router.post("/book/:id", ensureLogin, async (req, res) => {
               totalPrice: req.body.quantity * item.itemPrice,
               userName: user.name,
               userEnr: user.enr,
+              productID: item.productID,
+              priceID: item.priceID,
+              vendorAccountID: item.vendorAccountID,
+              itemID: item._id,
             },
           },
         }
       );
     } else {
-      if (user.orders[len - 1].vendorName == item.vendorName) {
+      for (let i = 0; i < len; i++) {
+        if (
+          user.orders[i].itemID == item._id &&
+          user.orders[i].isPaid == false
+        ) {
+          res.send("item already added");
+          check = 1;
+          break;
+        }
+      }
+      if (user.orders[len - 1].vendorName == item.vendorName && check == 0) {
         await User.updateMany(
           { enr: req.session.userid },
           {
@@ -202,12 +214,16 @@ router.post("/book/:id", ensureLogin, async (req, res) => {
                 totalPrice: req.body.quantity * item.itemPrice,
                 userName: user.name,
                 userEnr: user.enr,
+                productID: item.productID,
+                priceID: item.priceID,
+                vendorAccountID: item.vendorAccountID,
+                itemID: item._id,
               },
             },
           }
         );
       } else {
-        if (user.orders[len - 1].isActive == false) {
+        if (user.orders[len - 1].isActive == false && check == 0) {
           await User.updateMany(
             { enr: req.session.userid },
             {
@@ -220,17 +236,18 @@ router.post("/book/:id", ensureLogin, async (req, res) => {
                   totalPrice: req.body.quantity * item.itemPrice,
                   userName: user.name,
                   userEnr: user.enr,
+                  productID: item.productID,
+                  priceID: item.priceID,
+                  vendorAccountID: item.vendorAccountID,
+                  itemID: item._id,
                 },
               },
             }
           );
         } else {
-          res.send("Can add only one vendor until order is completed");
         }
       }
     }
-  } else {
-    res.send("add atleast 1 quantity");
   }
 });
 
@@ -259,10 +276,135 @@ router.post("/cart/delete/:id", ensureLogin, async (req, res) => {
   res.render("usCar", { ord, pr });
 });
 
-// will make this page after approval
+// sends request to  stripe
 router.post("/paynow", ensureLogin, async (req, res) => {
-  res.send("This feature is now under construction");
+  var orders = [];
+  var ordord = [];
+  const user = await User.findOne({
+    enr: req.session.userid,
+  });
+  const ord = user.orders;
+  const len = ord.length;
+  for (let i = 0; i < len; i++) {
+    if (ord[i].isActive == true && ord[i].isPaid == false) {
+      const or = { price: ord[i].priceID, quantity: ord[i].quantity };
+      const orr = {
+        price: ord[i].priceID,
+        quantity: ord[i].quantity,
+        id: ord[i]._id,
+        user: ord[i].userEnr,
+      };
+      orders.push(or);
+      ordord.push(orr);
+    }
+  }
+  console.log(orders);
+  const ordd = JSON.stringify(ordord);
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: [
+      orders[0],
+      orders[1],
+      orders[2],
+      orders[3],
+      orders[4],
+      orders[5],
+      orders[6],
+      orders[7],
+      orders[8],
+      orders[9],
+      orders[10],
+      orders[11],
+      orders[12],
+      orders[13],
+      orders[14],
+      orders[15],
+      orders[16],
+      orders[17],
+      orders[18],
+      orders[19],
+      orders[20],
+      orders[21],
+      orders[22],
+      orders[23],
+      orders[24],
+      orders[25],
+      orders[26],
+    ],
+    payment_intent_data: {
+      transfer_data: { destination: ord[len - 1].vendorAccountID },
+    },
+    metadata: { ordd },
+    success_url: "http://localhost:4000/users/dashboard",
+    cancel_url: "http://localhost:4000/users/dashboard",
+  });
+  res.redirect(session.url);
 });
+
+//webhook
+router.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    let event = req.body;
+
+    // Handle the event
+    switch (event.type) {
+      case "checkout.session.completed":
+        const checkoutSessionCompleted = event.data.object;
+        const data = checkoutSessionCompleted.metadata;
+        const dat = JSON.parse(data.ordd);
+        console.log(typeof dat);
+        console.log(dat);
+        console.log(dat.length);
+        var enrol;
+        if (!dat.length) {
+          enrol = dat.user;
+        } else {
+          enrol = dat[0].user;
+        }
+
+        const user = await User.findOne({ enr: enrol });
+        //   console.log(user)
+        for (let i = 0; i < user.orders.length; i++) {
+          for (let j = 0; j < dat.length; j++) {
+            if (user.orders[i]._id == dat[j].id) {
+              console.log(user.orders[i]._id);
+              console.log(dat[j].user);
+              await User.updateMany(
+                { enr: dat[j].user, "orders.isPaid": "false" },
+                {
+                  $set: {
+                    "orders.$.isPaid": true,
+                    "orders.$.orderedAt": Date.now(),
+                    "orders.$.creditOverdue": false,
+                    "orders.$.creditPaidAt": Date.now(),
+                  },
+                }
+              );
+            }
+          }
+        }
+
+        break;
+      case "checkout.session.async_payment_succeeded":
+        const checkoutSessionAsyncPaymentSucceeded = event.data.object;
+        // Then define and call a function to handle the event checkout.session.async_payment_succeeded
+        console.log(checkoutSessionAsyncPaymentSucceeded);
+        break;
+      case "payment_intent.succeeded":
+        const paymentIntentSucceeded = event.data.object;
+        // Then define and call a function to handle the event payment_intent.succeeded
+        //console.log(paymentIntentSucceeded)
+        break;
+      // ... handle other event types
+      default:
+    }
+
+    // Return a 200 response to acknowledge receipt of the event
+    res.send();
+  }
+);
 
 // this is to pay items using a credit system
 router.post("/paycred", ensureLogin, ensurePrice, async (req, res) => {
@@ -293,7 +435,39 @@ router.post("/paycred", ensureLogin, ensurePrice, async (req, res) => {
 });
 
 router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
-  var pr = 0;
+  var or, c, orr;
+  console.log(req.params.id);
+  const user = await User.findOne({
+    enr: req.session.userid,
+  });
+  const len = user.orders.length;
+  for (let i = 0; i < len; i++) {
+    if (user.orders[i]._id == req.params.id) {
+      or = { price: user.orders[i].priceID, quantity: user.orders[i].quantity };
+      c = i;
+      ordd = {
+        price: user.orders[i].priceID,
+        quantity: user.orders[i].quantity,
+        id: user.orders[i]._id,
+        user: user.orders[i].userEnr,
+      };
+    }
+  }
+  ordd = JSON.stringify(ordd);
+  console.log(ordd);
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: [or],
+    payment_intent_data: {
+      transfer_data: { destination: user.orders[c].vendorAccountID },
+    },
+    metadata: { ordd },
+    success_url: "http://localhost:4000/users/dashboard",
+    cancel_url: "http://localhost:4000/users/dashboard",
+  });
+  res.redirect(session.url);
+
+  /*var pr = 0;
   const user = await User.findOne({ enr: req.session.userid });
   const ord = user.orders;
   var len = 0;
@@ -312,12 +486,12 @@ router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
       credit: newCred,
       $set: {
         "orders.$.creditOverdue": false,
-        "orders.$.creditPaidAt" : Date.now()
-      }, 
+        "orders.$.creditPaidAt": Date.now(),
+      },
     }
   );
   console.log("hello " + req.params.id);
-  res.redirect("/users/credit");
+  res.redirect("/users/credit");*/
 });
 
 module.exports = router;

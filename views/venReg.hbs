@@ -4,23 +4,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
   </head>
   <body>
-    <form method="POST" action="/vendor/venReg">
-      <label for="">Your Name</label>
-      <input type="text" name="name" id="" required /><br />
-      <label for="">Your Email Address</label>
-      <input type="email" name="email" id="" required /><br />
-      <label for="">Primary Mobile Number</label>
-      <input
-        type="number"
-        name="mob"
-        id=""
-        min="0000000000"
-        max="9999999999"
-        required
-      /><br />
-      <input type="submit" />
-    </form>
+    <div class="box" style="padding-top:20vh">
+      <form method="POST" action="/vendor/venReg">
+        <label for="cars">Choose Vendor:</label>
+        <br />
+        <select name="name" id="cars">
+          <option value="Azad Canteen">Azad Canteen</option>
+          <option value="Cautley Canteen">Cautley Canteen</option>
+          <option value="Ganga Canteen">Ganga Canteen</option>
+          <option value="Govind Canteen">Govind Canteen</option>
+          <option value="Jawahar Canteen">Jawahar Canteen</option>
+          <option value="Radhakrishnan Canteen">Radhakrishnan Canteen</option>
+          <option value="Rajendra Canteen">Rajendra Canteen</option>
+          <option value="Rajiv Canteen">Rajiv Canteen</option>
+          <option value="Ravindra Canteen">Ravindra Canteen</option>
+          <option value="Sarojini Canteen">Sarojini Canteen</option>
+          <option value=" Kasturbha Canteen"> Kasturbha Canteen</option>
+          <option value="Vigyan Kunj Canteen">Vigyan Kunj Canteen</option>
+          <option value="SAC Canteen">SAC Canteen</option>
+          <option value="Green Gala Cafe">Green Gala Cafe</option>
+          <option value="CBRI Canteen">CBRI Canteen</option>
+          <option value="Azad Night Cafe">Azad Night Cafe</option>
+          <option value="Cautley Night Cafe">Cautley Night Cafe</option>
+          <option value="Ganga Night Cafe">Ganga Night Cafe</option>
+          <option value="Govind Night Cafe">Govind Night Cafe</option>
+          <option value="Jawahar Night Cafe">Jawahar Night Cafe</option>
+          <option value="Radhakrishnan Night Cafe">Radhakrishnan Night Cafe</option>
+          <option value="Rajendra Night Cafe">Rajendra Night Cafe</option>
+          <option value="Rajiv Night Cafe">Rajiv Night Cafe</option>
+          <option value="Ravindra Night Cafe">Ravindra Night Cafe</option>
+          <option value="Sarojini Night Cafe">Sarojini Night Cafe</option>
+          <option value="Kasturbha Night Cafe">Kasturbha Night Cafe</option>
+          <option value="Vigyan Kunj Night Cafe">Vigyan Kunj Night Cafe</option>
+        </select>
+        <br />
+        <label for="">Your Email Address</label>
+        <br />
+        <input type="email" name="email" id="" required /><br />
+        <label for="">Primary Mobile Number</label>
+        <br />
+        <input
+          type="number"
+          name="mob"
+          id=""
+          min="0000000000"
+          max="9999999999"
+          required
+        /><br />
+        <label for="">Enter a password</label>
+        <br />
+        <input type="password" name="password" id="" required /><br />
+        <input type="submit" />
+      </form>
+    </div>
   </body>
 </html>

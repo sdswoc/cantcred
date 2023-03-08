@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,17 +9,22 @@
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
-   <h6>This is your cart</h6>  
-<br>
+   
 
+
+{{>navbar}}
+<div class="main" style="padding-left:15% ; padding-right:15%; padding-top:20px">
+<br><br>
+back button
  {{#if ord}}
-<table>
+<table class="purple lighten-3 striped">
   <tr>
     <th>Vendor Name</th>
     <th>Item Name</th>
     <th>Price of each item </th>
     <th>Quantity</th>
     <th>Total Price</th>
+    <th></th>
   </tr>
   {{#each ord}}
      {{#if isActive}}
@@ -49,6 +55,7 @@
     <br>
     {{>paybutton}} <br>
     {{>paynow}}
+    </div>
 </body>
 </html>
 

@@ -1,49 +1,44 @@
 *{
-    font-family: Helvetica;
+    font-family:Helvetica;
 }
 
-body{
-    background-color: black;
-    background-image: url('/public/images/landing\ page.png');
+
+.bg-image{
+    background-size: 100% 95%;  
+    background-repeat: no-repeat;
+    background-image: url('../images/venHom.png');
+    height: 100vh;
 }
 
-.header{
-    position: relative;
-    color: white;
-    text-align:center;
-    font-size: 500%;
-    
-}
 
-.label{
-    position: relative;
-    color: white;
+
+.card-content{
     text-align: center;
-    font-size: 200%;
+    font-weight: bold;
+    font-size:100%;
+    }
+
+    .card.hoverable{
+        border: 1px;
+        border-color:blueviolet;
+        border-style: solid;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+.col.hey{
+    background-color: #6a1b9a;  /*purple darken 3*/
 }
 
-#login{
-    text-decoration: none;
-    color: rgb(0, 0, 0);
+
+
+
+
+.p{
+    font-size: 600%;
+    text-align: center;
+    padding-top: 30vh;
+    color: #4a148c;
+    font-weight: 600;
 }
 
-#register{
-    text-decoration: none;
-    color:rgb(0, 0, 0)
-}
-
-#login-btn{
-    position: fixed;
-    left:35%;
-    width: 30%;
-    top:40%;
-    height : 7%;
-}
-
-#reg-btn{
-    position: fixed;
-    left:35%;
-    width: 30%;
-    top:48%;
-    height : 7%;
-}

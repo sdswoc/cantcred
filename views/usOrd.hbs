@@ -8,9 +8,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
-
+  <link rel="stylesheet" href="../public/css/usOrd.css"
   </head>
-  <body>
+  <body style="font-family:Helvetica">
+
+<div class="main">
     <h1>
       Current orders
     </h1>
@@ -43,23 +45,23 @@
     <br /><br /><br />
     <h1> Past Orders</h1>
     <br />
-    <table>
+    <table class="left-align striped purple lighten-4 " >
       <tr>
         <th>Vendor Name</th>
         <th>Item Name</th>
         <th>Price </th>
         <th>Quantity</th>
         <th>Total Price</th>
-        <th>Date and Time</th>
-        <th>Mode of Payment</th>
+        <th>Date&Time</th>
+        <th>Mode</th>
       </tr>
       {{#each ord}}
         {{#if isPaid}}
           {{#if isActive}}{{else}}
-            <tr>
-              <td>{{vendorName}}</td>
-              <td>{{itemName}}</td>
-              <td>{{itemPrice}}</td>
+            <tr class="hoverable">
+              <td >{{vendorName}}</td>
+              <td >{{itemName}}</td>
+              <td >{{itemPrice}}</td>
               <td>{{quantity}}</td>
               <td>{{totalPrice}}</td>
               <td>{{formatDate orderedAt "DD-MM-YYYY, HH:mm:ss "}}</td>
@@ -69,5 +71,6 @@
         {{/if}}
       {{/each}}
     </table>
+    </div>
   </body>
 </html>
