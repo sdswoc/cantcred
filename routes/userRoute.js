@@ -66,14 +66,29 @@ router.get("/dashboard", ensureLogin, async (req, res, next) => {
 
 //profile page of the user
 router.get("/profile", ensureLogin, async (req, res) => {
-  res.render("usPrf");
+  const user = await User.findOne({enr: req.session.userid})
+  var name = user.name;
+  var namesplit = name.split(" ");
+  const msg = namesplit[0];
+  var len = user.orders.length , currOrdLen = 0 , currOrd = []
+  for(let i = 0 ; i < len ; i++)
+  {
+    if(user.orders[i].isActive == true && user.orders[i].isPaid == true){
+    currOrdLen++
+    currOrd.push(user.orders[i])}
+  }
+  console.log(currOrd)
+  const credit = user.credit
+  res.render("usPrf" , {user, msg , currOrdLen , currOrd , credit});
 });
 
 //menu of the user
 router.get("/menu/", ensureLogin, (req, res, next) => {
   Items.find({ vendorName: req.query.vendorName }, (err, items) => {
     nm = "welcome " + req.session.userid;
-    res.render("usMen", { items, nm });
+    vendorName = items[0].vendorName
+    console.log(vendorName)
+    res.render("usMen", { items, nm , vendorName});
   });
 });
 
@@ -93,17 +108,17 @@ router.get("/credit", ensureLogin, async (req, res) => {
   if (user.orders) {
     len = user.orders.length;
   }
+  var isExists = false;
   for (let i = 0; i < len; i++) {
     if (
-      user.orders[i].isActive == false &&
-      user.orders[i].isPaid == true &&
-      user.orders[i].creditOverdue == true
+      user.orders[i].isActive == false && user.orders[i].isPaid == true && user.orders[i].creditOverdue == true
     ) {
       ord.push(user.orders[i]);
+      isExists = true;
     }
   }
-  console.log(ord);
-  res.render("usCre", { credit, ord });
+  console.log(ord)
+  res.render("usCre", { credit, ord , isExists});
 });
 
 //shows the cart of the user , we determine the price of the items which are only in the cart , to be in cart , order must be not paid , but shall be active
@@ -113,19 +128,21 @@ router.get("/cart", ensureLogin, async (req, res) => {
     "orders.isPaid": false,
     "orders.isActive": true,
   });
+  var isExists;
   if (user) {
     const ord = user.orders;
     const len = ord.length;
-    var pr = 0;
+    var pr = 0; var isExists = true;
     for (let i = 0; i < len; i++) {
       if (ord[i].isActive == true && ord[i].isPaid == false) {
         pr += ord[i].totalPrice;
       }
     }
     req.session.price = pr;
-    res.render("usCar", { ord, pr });
+    res.render("usCar", { ord, pr , isExists });
   } else {
-    res.render("usCar");
+    isExists = false;
+    res.render("usCar" , {isExists});
   }
 });
 
@@ -196,7 +213,7 @@ router.post("/book/:id", ensureLogin, async (req, res) => {
           user.orders[i].itemID == item._id &&
           user.orders[i].isPaid == false
         ) {
-          res.send("item already added");
+          res.redirect('back');
           check = 1;
           break;
         }
@@ -261,7 +278,7 @@ router.post("/cart/delete/:id", ensureLogin, async (req, res) => {
       },
     }
   );
-  const user = await User.findOne({ enr: req.session.userid });
+  /*const user = await User.findOne({ enr: req.session.userid });
   const ord = user.orders;
   const len = ord.length;
   console.log(len);
@@ -272,8 +289,9 @@ router.post("/cart/delete/:id", ensureLogin, async (req, res) => {
     }
   }
   pr = pr * -1; //fixes bug which shows price in negative when an item is deleted
-  req.session.price = pr;
-  res.render("usCar", { ord, pr });
+  req.session.price = pr;*/
+  res.redirect("/users/cart")
+  //res.render("usCar", { ord, pr });
 });
 
 // sends request to  stripe
@@ -289,8 +307,6 @@ router.post("/paynow", ensureLogin, async (req, res) => {
     if (ord[i].isActive == true && ord[i].isPaid == false) {
       const or = { price: ord[i].priceID, quantity: ord[i].quantity };
       const orr = {
-        price: ord[i].priceID,
-        quantity: ord[i].quantity,
         id: ord[i]._id,
         user: ord[i].userEnr,
       };
@@ -354,36 +370,59 @@ router.post(
         const checkoutSessionCompleted = event.data.object;
         const data = checkoutSessionCompleted.metadata;
         const dat = JSON.parse(data.ordd);
-        console.log(typeof dat);
-        console.log(dat);
-        console.log(dat.length);
-        var enrol;
+        var enrol,len;
         if (!dat.length) {
-          enrol = dat.user;
-        } else {
-          enrol = dat[0].user;
-        }
-
-        const user = await User.findOne({ enr: enrol });
-        //   console.log(user)
+          const user = await User.findOne({ enr: dat.user });
+          for (let i = 0; i < user.orders.length; i++) {
+            if (user.orders[i]._id == dat.id) {
+                console.log(user.orders[i]._id);
+                console.log(dat.user);
+                var newCredit = user.credit; var Datex = Date.now()
+                if (user.orders[i].modeOfPayment == "credit"){
+                var newCredit= user.credit + user.orders[i].totalPrice
+                Datex = user.orders[i].orderedAt}
+                console.log(newCredit)
+                await User.updateMany(
+                  { enr: dat.user, "orders._id": dat.id },
+                  {
+                    $set: {
+                      "orders.$.isPaid": true,
+                      "orders.$.orderedAt": Datex,
+                      "orders.$.creditOverdue": false,
+                      "orders.$.creditPaidAt": Date.now(),
+                      credit : newCredit
+                    },
+                  }
+                );
+            }
+          }     
+        } 
+        else {
+        const user = await User.findOne({ enr: dat[0].user });
+        console.log(user)
         for (let i = 0; i < user.orders.length; i++) {
           for (let j = 0; j < dat.length; j++) {
             if (user.orders[i]._id == dat[j].id) {
               console.log(user.orders[i]._id);
               console.log(dat[j].user);
+              var newCredit = user.credit
+              if (user.orders[i].modeOfPayment == "credit"){
+              var newCredit= user.credit + user.orders[i].itemPrice }
               await User.updateMany(
-                { enr: dat[j].user, "orders.isPaid": "false" },
+                { enr: dat[j].user, "orders._id": dat[j].id },
                 {
                   $set: {
                     "orders.$.isPaid": true,
                     "orders.$.orderedAt": Date.now(),
                     "orders.$.creditOverdue": false,
                     "orders.$.creditPaidAt": Date.now(),
+                    credit : newCredit
                   },
                 }
               );
             }
           }
+        }
         }
 
         break;
@@ -408,7 +447,6 @@ router.post(
 
 // this is to pay items using a credit system
 router.post("/paycred", ensureLogin, ensurePrice, async (req, res) => {
-  res.redirect("/users/cart");
   const user = await User.findOne({ enr: req.session.userid });
   const ord = user.orders;
   const len = ord.length;
@@ -432,11 +470,11 @@ router.post("/paycred", ensureLogin, ensurePrice, async (req, res) => {
     var newcred = user.credit - pr;
     await User.updateMany({ enr: req.session.userid }, { credit: newcred });
   }
+  res.redirect("/users/cart");
 });
 
 router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
-  var or, c, orr;
-  console.log(req.params.id);
+  var or, c, ordd;
   const user = await User.findOne({
     enr: req.session.userid,
   });
@@ -453,6 +491,7 @@ router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
       };
     }
   }
+  console.log(or)
   ordd = JSON.stringify(ordd);
   console.log(ordd);
   const session = await stripe.checkout.sessions.create({
@@ -471,7 +510,7 @@ router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
   const user = await User.findOne({ enr: req.session.userid });
   const ord = user.orders;
   var len = 0;
-  if (user.orders) {
+  if (user.orders) 
     len = user.orders.length;
   }
   for (let i = 0; i < len; i++) {

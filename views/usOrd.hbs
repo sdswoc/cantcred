@@ -11,41 +11,15 @@
   <link rel="stylesheet" href="../public/css/usOrd.css"
   </head>
   <body style="font-family:Helvetica">
-
-<div class="main">
-    <h1>
-      Current orders
-    </h1>
-    <br />
-
-    {{#if ord}}
-      <table>
-        <tr>
-          <th>Vendor Name</th>
-          <th>Item Name</th>
-          <th>Price of each item </th>
-          <th>Quantity</th>
-          <th>Total Price</th>
-        </tr>
-        {{#each ord}}
-          {{#if isPaid}}
-            {{#if isActive}}
-              <tr>
-                <td>{{vendorName}}</td>
-                <td>{{itemName}}</td>
-                <td>{{itemPrice}}</td>
-                <td>{{quantity}}</td>
-                <td>{{totalPrice}}</td>
-              </tr>
-            {{/if}}
-          {{/if}}
-        {{/each}}
-      </table>
-    {{/if}}
-    <br /><br /><br />
-    <h1> Past Orders</h1>
-    <br />
-    <table class="left-align striped purple lighten-4 " >
+{{>navbar}}
+<div class="container">
+    
+   <div class="row">
+    <br><br><br><br><br><br>
+    <div class="purple-text text-darken-3" style="font-size: 200%; font-weight:bolder">PAST ORDERS</div>
+    <br /><br>  <div class="divider"></div> <br>
+  
+    <table class="left-align striped purple-text text-darken-4 purple lighten-4 "  style="font-size: 80%;">
       <tr>
         <th>Vendor Name</th>
         <th>Item Name</th>
@@ -71,6 +45,7 @@
         {{/if}}
       {{/each}}
     </table>
+    </div>
     </div>
   </body>
 </html>

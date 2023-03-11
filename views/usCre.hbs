@@ -7,9 +7,19 @@
     <title>Credit</title>
 </head>
 <body>
-    your remaining credit is {{credit}}
+  {{>navbar}}
+  <br><br><br><br>
+
+   <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="header" style="font-size: 180%; color:#4a148c ">your remaining credit is <span style="font-weight: bold;">{{credit}}</span></div>
+    
+    </div>
+    </div>
     {{#if ord}}
-    <table>
+    <table class="purple-text text-darken-2 purple lighten-5" style="border-radius: 15px; font-size:80%">
+      
         <tr>
           <th>Vendor</th>
           <th>Item Name</th>
@@ -20,6 +30,7 @@
           <th></th>
         </tr>
     {{#each ord}}
+     <tr style="border-radius: 15px;">
       <td>{{vendorName}}</td>
       <td>{{itemName}}</td>
       <td>{{itemPrice}}</td>
@@ -27,8 +38,13 @@
       <td>{{totalPrice}}</td>
       <td>{{formatDate orderedAt 'DD-MM-YYYY, HH:mm:ss' }}</td>
       <td>{{>creditbutton}}</td>    
+      </tr>
     {{/each}}
     </table>
+    
     {{/if}}
+ 
+    
+    </div>
 </body>
 </html>

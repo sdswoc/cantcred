@@ -13,9 +13,9 @@
 
 
 {{>navbar}}
-<div class="main" style="padding-left:15% ; padding-right:15%; padding-top:20px">
+<div class="container">
 <br><br>
-back button
+  {{#if isExists}}
  {{#if ord}}
 <table class="purple lighten-3 striped">
   <tr>
@@ -55,6 +55,25 @@ back button
     <br>
     {{>paybutton}} <br>
     {{>paynow}}
+    {{else}}
+    <div class="container">
+      <br><br>  
+      <div class="row hide-on-small-only"></div>
+       <div class="row hide-on-small-only"></div>
+        <div class="row hide-on-small-only"></div>
+         <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+           <div class="row hide-on-small-only"></div>
+            <div class="row hide-on-small-only"></div>
+             <div class="row hide-on-small-only"></div>
+              
+     
+     <img class="responsive-img"src="../public/images/emptycart.png">
+     <div class="row"><div class="row"></div></div>
+     <span style="font-size:200%; color:#4a148c"> You  do not have any items in your cart</span>
+          </div>
+   
+    {{/if}}
     </div>
 </body>
 </html>

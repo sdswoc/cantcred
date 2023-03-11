@@ -7,7 +7,6 @@ const userDetailsSchema = new mongoose.Schema({
   email: { type: String, unique: true, default: "" },
   mob: { type: Number, unique: true, default: 0 },
   credit: { type: Number, default: 200 },
-  isVerified: { type: Boolean, default: false },
   orders: [
     {
       isPaid: { type: Boolean, default: false },
