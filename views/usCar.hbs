@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Cart</title>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+<body>
+   
+
+
+{{>navbar}}
+<div class="container">
+<br><br>
+  {{#if isExists}}
+ {{#if ord}}
+<table class="purple lighten-3 striped">
+  <tr>
+    <th>Vendor Name</th>
+    <th>Item Name</th>
+    <th>Price of each item </th>
+    <th>Quantity</th>
+    <th>Total Price</th>
+    <th></th>
+  </tr>
+  {{#each ord}}
+     {{#if isActive}}
+       {{#if isPaid}}
+
+       {{else}}
+  <tr>
+    <td>{{vendorName}}</td>
+    <td>{{itemName}}</td>
+    <td>{{itemPrice}}</td>
+    <td>{{quantity}}</td>
+    <td>{{totalPrice}}</td>
+    <td>
+       
+       <form action ="/users/cart/delete/{{_id}}" method="POST" id="delete-item">
+                 <input type="hidden" name="method" value="DELETE">
+                 <button type="submit" class="btn red">DELETE</button>
+              </form>
+    </td>
+  </tr>
+       {{/if}}
+     {{/if}}
+  {{/each}}
+</table>
+{{/if}}
+    Total Price : {{pr}}
+    <br>
+    <br>
+    {{>paybutton}} <br>
+    {{>paynow}}
+    {{else}}
+    <div class="container">
+      <br><br>  
+      <div class="row hide-on-small-only"></div>
+       <div class="row hide-on-small-only"></div>
+        <div class="row hide-on-small-only"></div>
+         <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+           <div class="row hide-on-small-only"></div>
+            <div class="row hide-on-small-only"></div>
+             <div class="row hide-on-small-only"></div>
+              
+     
+     <img class="responsive-img"src="../public/images/emptycart.png">
+     <div class="row"><div class="row"></div></div>
+     <span style="font-size:200%; color:#4a148c"> You  do not have any items in your cart</span>
+          </div>
+   
+    {{/if}}
+    </div>
+</body>
+</html>
+
+

@@ -1,0 +1,108 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CANTCRED</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link rel="stylesheet" href="../public/css/venhom.css" />
+  </head>
+  <body>
+    <div class="main">
+      <div class="row">
+        <div class="col l12 s12 m12">
+          {{#ifEquals regmsg "Success"}}
+            <div class="card green lighten-3 green-text text-darken-3">
+              You have been registered succesfully , please wait for the
+              verification process
+            </div>
+          {{/ifEquals}}
+          {{#ifEquals regmsg "Failure"}}
+            <div class="card red lighten-3 brown-text text-darken-3">
+              You have already registered, kindly login or wait for verification
+              process to complete.
+            </div>
+          {{/ifEquals}}
+        </div>
+        <div class="col xl9 l9 m6 hide-on-small-only">
+          <div class="col hey">
+            <div class="logo col l3 m9 offset-l5">
+              <img class="responsive-img" src="../public/images/logo.png" />
+            </div>
+          </div>
+          <p class="p"> VENDOR'S PORTAL</p>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+        </div>
+        <div class="divider"></div>
+        <div class="float-left col xl3 l3 m6 s12 bg-image">
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+          <div class="row">
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="col l10 s8 m9 offset-s2 offset-l1">
+              <div class="card hoverable">
+                <div class="card-content">
+                  <a
+                    href="http://localhost:4000/vendor/login"
+                    class="waves-effect waves-light btn-flat white purple-text"
+                    style="width:100% ;"
+                  >
+                    Login</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col l10 s8 m9 offset-s2 offset-l1">
+              <div class="card hoverable">
+                <div class="card-content">
+                  <a
+                    href="http://localhost:4000/vendor/register"
+                    class="waves-effect waves-light btn-flat white purple-text"
+                    style="width:100% ;"
+                  >
+                    register</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+<h6>Vendor's Menu </h6>
+<h3>{{nm}}</h3>
+{{>addbutton}}
+<p>Here are your listed items</p>
+{{#if items}}
+    <table class="striped">
+      <thead>
+        <th>Item Name</th>
+        <th>Item Price</th>
+        <th>Availibility</th>
+        <th></th>
+      </thead>
+      <tbody>
+         {{#each items}}
+            
+            <tr>
+              <td>{{itemName}}</td>
+
+              <td>{{itemPrice}}</td>
+
+              <td><span class="dash-avail">{{avail}}
+                    <form action ="/vendor/change/{{_id}}" method="POST" id="change-item">
+                    <input type="hidden" name="method" value="CHANGE">
+                    <button type="submit" class="btn green">CHANGE</button>
+                    </form>
+                  </span>
+              </td>
+
+              <td>             
+              <form action ="/vendor/delete/{{_id}}" method="POST" id="delete-item">
+                 <input type="hidden" name="method" value="DELETE">
+                 <button type="submit" class="btn red">DELETE</button>
+              </form>
+              </td>
+
+            </tr>
+            
+        {{/each}}
+      </tbody>
+    </table>
+
+{{else}}
+     <p>You have not added any items</p>
+{{/if}}

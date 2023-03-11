@@ -1,0 +1,44 @@
+*{
+    font-family:Helvetica;
+}
+
+
+.bg-image{
+    background-size: 100% 95%;  
+    background-repeat: no-repeat;
+    background-image: url('../images/venHom.png');
+    height: 100vh;
+}
+
+
+
+.card-content{
+    text-align: center;
+    font-weight: bold;
+    font-size:100%;
+    }
+
+    .card.hoverable{
+        border: 1px;
+        border-color:blueviolet;
+        border-style: solid;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+.col.hey{
+    background-color: #6a1b9a;  /*purple darken 3*/
+}
+
+
+
+
+
+.p{
+    font-size: 600%;
+    text-align: center;
+    padding-top: 30vh;
+    color: #4a148c;
+    font-weight: 600;
+}
+

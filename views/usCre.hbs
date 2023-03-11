@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit</title>
+</head>
+<body>
+  {{>navbar}}
+  <br><br><br><br>
+
+   <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="header" style="font-size: 180%; color:#4a148c ">your remaining credit is <span style="font-weight: bold;">{{credit}}</span></div>
+    
+    </div>
+    </div>
+    {{#if ord}}
+    <table class="purple-text text-darken-2 purple lighten-5" style="border-radius: 15px; font-size:80%">
+      
+        <tr>
+          <th>Vendor</th>
+          <th>Item Name</th>
+          <th>Price </th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Time</th>
+          <th></th>
+        </tr>
+    {{#each ord}}
+     <tr style="border-radius: 15px;">
+      <td>{{vendorName}}</td>
+      <td>{{itemName}}</td>
+      <td>{{itemPrice}}</td>
+      <td>{{quantity}}</td>
+      <td>{{totalPrice}}</td>
+      <td>{{formatDate orderedAt 'DD-MM-YYYY, HH:mm:ss' }}</td>
+      <td>{{>creditbutton}}</td>    
+      </tr>
+    {{/each}}
+    </table>
+    
+    {{/if}}
+ 
+    
+    </div>
+</body>
+</html>
