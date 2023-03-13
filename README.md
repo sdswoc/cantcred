@@ -39,7 +39,7 @@ create a .env file and use the variables in sample.env , copy the variables and 
   
 run the command  "npm start" in the terminal
   
-open another terminal window and run the command "stripe listen --forward-to http://localhost:<port>/users/webhook
+open another terminal window and run the command "stripe listen --forward-to localhost:<port>/users/webhook
 
 # Using the app
   
