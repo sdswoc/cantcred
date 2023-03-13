@@ -2,20 +2,31 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
 />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
 
 <form action="/users/book/{{_id}}" method="POST" id="book-item">
-  <input type="number" name="quantity" value="quantity" min="1" max="10" style="width:fit-content " required/>
-  
+  <input
+    type="number"
+    name="quantity"
+    value="quantity"
+    min="1"
+    max="10"
+    style="width:fit-content "
+    required
+  />
+
   <button
     type="submit"
     class="prefix waves-effect waves-light btn white purple-text text-darken-4 disabled"
     name="btn"
     value="BOOK"
-     style="border: solid 1px #ffffff ; border-radius: 5px; ">
-       <i class="material-icons">add</i>
+    style="border: solid 1px #ffffff ; border-radius: 5px; "
+  >
+    <i class="material-icons">add</i>
 
-     <span style="font-weight: bold;">ADD TO CART</span></button>
+    <span style="font-weight: bold;">ADD TO CART</span></button>
 
 </form>

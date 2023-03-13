@@ -24,8 +24,6 @@ router.get("/", async (req, res) => {
   res.render("home");
 });
 
-
-
 //Verification process starts
 router.get("/channeli", passport.authenticate("oauth2"));
 router.get(
@@ -85,7 +83,5 @@ passport.use(
   )
 );
 //verification process ends
-
-
 
 module.exports = router;

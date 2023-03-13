@@ -11,25 +11,20 @@ router.use(express.urlencoded({ extended: false })); //body parse
 
 router.use(express.static(__dirname));
 
-//middleware to ensure session is active
+//middleware to ensure session is active and mobile number is verified
 const ensureLogin = async function (req, res, next) {
-  if (req.session.userid != null) 
-  {
-    const user = await User.findOne({enr:req.session.userid})
-    const enrol = user.enr
-    if (user.mob)
-    next();
-    else
-    res.redirect("/users/onboarding/?enrol=" + enrol);
-
-  }
-  else res.redirect("/");
+  if (req.session.userid != null) {
+    const user = await User.findOne({ enr: req.session.userid });
+    const enrol = user.enr;
+    if (user.mob) next();
+    else res.redirect("/users/onboarding/?enrol=" + enrol);
+  } else res.redirect("/");
 };
 // middleware to ensure that credit limit is set to 200
 const ensurePrice = async function (req, res, next) {
   const user = await User.findOne({ enr: req.session.userid });
   if (user.credit - req.session.price < 0) {
-    res.redirect('http://localhost:4000/users/cart/?creditLim=true');
+    res.redirect("http://localhost:4000/users/cart/?creditLim=true");
   } else {
     next();
   }
@@ -45,38 +40,35 @@ router.get("/", (req, res) => {
   }
 });
 
-//onboarding of student for first time login
+//onboarding of student for mobile verification
 router.get("/onboarding", async (req, res, next) => {
   const enrol = req.query.enrol;
-  req.session.userid = enrol
+  req.session.userid = enrol;
   const user = await User.findOne({ enr: enrol });
-  console.log(enrol)
-  console.log(user)
-  console.log(req.session.userid)
-  if(user){
+  if (user) {
     if (!user.isVerified) {
-      res.render('usOnb')
+      res.render("usOnb");
     } else {
       res.redirect("/users/dashboard");
-    }}
-    else{
-      res.redirect('/users')
+    }
+  } else {
+    res.redirect("/users");
   }
- 
 });
 
 //updating number after onboarding
-router.post("/number",  async (req, res) => {
-  console.log(req.session.userid)
-  const mob = await User.findOne ({mob : req.body.number})
-  if (!mob){
-  await User.updateOne({ enr: req.session.userid }, { mob: req.body.number, isVerified:true });
-  res.redirect("/users/dashboard");
+router.post("/number", async (req, res) => {
+  const mob = await User.findOne({ mob: req.body.number });
+  if (!mob) {
+    await User.updateOne(
+      { enr: req.session.userid },
+      { mob: req.body.number, isVerified: true }
+    );
+    res.redirect("/users/dashboard");
+  } else {
+    const alreadyExists = true;
+    res.render("usOnb", { alreadyExists });
   }
-  else{
-  const alreadyExists = true
-  res.render('usOnb' , {alreadyExists})}
-  
 });
 
 //dashboard of the user
@@ -92,30 +84,29 @@ router.get("/dashboard", ensureLogin, async (req, res, next) => {
 
 //profile page of the user
 router.get("/profile", ensureLogin, async (req, res) => {
-  const user = await User.findOne({enr: req.session.userid})
+  const user = await User.findOne({ enr: req.session.userid });
   var name = user.name;
   var namesplit = name.split(" ");
   const msg = namesplit[0];
-  var len = user.orders.length , currOrdLen = 0 , currOrd = []
-  for(let i = 0 ; i < len ; i++)
-  {
-    if(user.orders[i].isActive == true && user.orders[i].isPaid == true){
-    currOrdLen++
-    currOrd.push(user.orders[i])}
+  var len = user.orders.length,
+    currOrdLen = 0,
+    currOrd = [];
+  for (let i = 0; i < len; i++) {
+    if (user.orders[i].isActive == true && user.orders[i].isPaid == true) {
+      currOrdLen++;
+      currOrd.push(user.orders[i]);
+    }
   }
-  console.log(currOrd)
-  const credit = user.credit
-  res.render("usPrf" , {user, msg , currOrdLen , currOrd , credit});
+  const credit = user.credit;
+  res.render("usPrf", { user, msg, currOrdLen, currOrd, credit });
 });
 
 //menu of the user
 router.get("/menu/", ensureLogin, (req, res, next) => {
   Items.find({ vendorName: req.query.vendorName }, (err, items) => {
     nm = "welcome " + req.session.userid;
-    console.log(items)
-     vendorName = req.query.vendorName
-    console.log(vendorName)
-    res.render("usMen", { items, nm , vendorName});
+    vendorName = req.query.vendorName;
+    res.render("usMen", { items, nm, vendorName });
   });
 });
 
@@ -126,11 +117,11 @@ router.get("/orders", ensureLogin, async (req, res) => {
   res.render("usOrd", { ord });
 });
 
-// to show the credits of the user, here we store the items paid by credit and delivered in an array ord, we ensure that the credit has not already been paid
+// page to see all past credit transactions and refill credit
 router.get("/credit", ensureLogin, async (req, res) => {
   const user = await User.findOne({ enr: req.session.userid });
   const credit = user.credit;
-  var ord = []; 
+  var ord = [];
   var pastord = [];
   var len = 0;
   if (user.orders) {
@@ -138,7 +129,9 @@ router.get("/credit", ensureLogin, async (req, res) => {
   }
   for (let i = 0; i < len; i++) {
     if (
-      user.orders[i].isActive == false && user.orders[i].isPaid == true && user.orders[i].creditOverdue == true
+      user.orders[i].isActive == false &&
+      user.orders[i].isPaid == true &&
+      user.orders[i].creditOverdue == true
     ) {
       ord.push(user.orders[i]);
     }
@@ -151,16 +144,15 @@ router.get("/credit", ensureLogin, async (req, res) => {
       pastord.push(user.orders[i]);
     }
   }
-  console.log(ord)
-  res.render("usCre", { credit, ord , pastord});
+  res.render("usCre", { credit, ord, pastord });
 });
 
 //shows the cart of the user , we determine the price of the items which are only in the cart , to be in cart , order must be not paid , but shall be active
-router.get("/cart", ensureLogin,  async (req, res) => {
-  var credmsg = false
-  console.log(req.query.creditLim)
-  if(req.query.creditLim){
-  credmsg = req.query.creditLim}
+router.get("/cart", ensureLogin, async (req, res) => {
+  var credmsg = false;
+  if (req.query.creditLim) {
+    credmsg = req.query.creditLim;
+  }
   const user = await User.findOne({
     enr: req.session.userid,
     "orders.isPaid": false,
@@ -170,41 +162,22 @@ router.get("/cart", ensureLogin,  async (req, res) => {
   if (user) {
     const ord = user.orders;
     const len = ord.length;
-    const credit = user.credit
-    var pr = 0; var isExists = true;
+    const credit = user.credit;
+    var pr = 0;
+    var isExists = true;
     for (let i = 0; i < len; i++) {
       if (ord[i].isActive == true && ord[i].isPaid == false) {
         pr += ord[i].totalPrice;
       }
     }
     req.session.price = pr;
-    res.render("usCar", { ord, pr , isExists , credmsg, credit});
+    res.render("usCar", { ord, pr, isExists, credmsg, credit });
   } else {
     isExists = false;
-    res.render("usCar" , {isExists});
+    res.render("usCar", { isExists });
   }
 });
 
-router.get("/credit/transactions", ensureLogin, async (req, res) => {
-  const user = await User.findOne({ enr: req.session.userid });
-  const credit = user.credit;
-  var pastord = [];
-  var len = 0;
-  if (user.orders) {
-    len = user.orders.length;
-  }
-  for (let i = 0; i < len; i++) {
-    if (
-      user.orders[i].isActive == false &&
-      user.orders[i].isPaid == true &&
-      user.orders[i].creditOverdue == false &&
-      user.orders[i].modeOfPayment == "credit"
-    ) {
-      pastord.push(user.orders[i]);
-    }
-  }
-  res.render("usTra", { credit, pastord });
-});
 
 //destroys sessoin
 router.get("/logout", (req, res) => {
@@ -302,7 +275,7 @@ router.post("/book/:id", ensureLogin, async (req, res) => {
         }
       }
     }
-    res.redirect('back')
+    res.redirect("back");
   }
 });
 
@@ -316,7 +289,7 @@ router.post("/cart/delete/:id", ensureLogin, async (req, res) => {
       },
     }
   );
-  res.redirect("/users/cart")
+  res.redirect("/users/cart");
 });
 
 // sends request to  stripe
@@ -339,7 +312,6 @@ router.post("/paynow", ensureLogin, async (req, res) => {
       ordord.push(orr);
     }
   }
-  console.log(orders);
   const ordd = JSON.stringify(ordord);
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -395,76 +367,61 @@ router.post(
         const checkoutSessionCompleted = event.data.object;
         const data = checkoutSessionCompleted.metadata;
         const dat = JSON.parse(data.ordd);
-        var enrol,len;
+        var enrol, len;
         if (!dat.length) {
           const user = await User.findOne({ enr: dat.user });
           for (let i = 0; i < user.orders.length; i++) {
             if (user.orders[i]._id == dat.id) {
-                console.log(user.orders[i]._id);
-                console.log(dat.user);
-                var newCredit = user.credit; var Datex = Date.now()
-                if (user.orders[i].modeOfPayment == "credit"){
-                var newCredit= user.credit + user.orders[i].totalPrice
-                Datex = user.orders[i].orderedAt}
-                console.log(newCredit)
-                await User.updateMany(
-                  { enr: dat.user, "orders._id": dat.id },
-                  {
-                    $set: {
-                      "orders.$.isPaid": true,
-                      "orders.$.orderedAt": Datex,
-                      "orders.$.creditOverdue": false,
-                      "orders.$.creditPaidAt": Date.now(),
-                      credit : newCredit
-                    },
-                  }
-                );
-            }
-          }     
-        } 
-        else {
-        const user = await User.findOne({ enr: dat[0].user });
-        console.log(user)
-        for (let i = 0; i < user.orders.length; i++) {
-          for (let j = 0; j < dat.length; j++) {
-            if (user.orders[i]._id == dat[j].id) {
-              console.log(user.orders[i]._id);
-              console.log(dat[j].user);
-              var newCredit = user.credit
-              if (user.orders[i].modeOfPayment == "credit"){
-              var newCredit= user.credit + user.orders[i].itemPrice }
+              var newCredit = user.credit;
+              var Datex = Date.now();
+              if (user.orders[i].modeOfPayment == "credit") {
+                var newCredit = user.credit + user.orders[i].totalPrice;
+                Datex = user.orders[i].orderedAt;
+              }
               await User.updateMany(
-                { enr: dat[j].user, "orders._id": dat[j].id },
+                { enr: dat.user, "orders._id": dat.id },
                 {
                   $set: {
                     "orders.$.isPaid": true,
-                    "orders.$.orderedAt": Date.now(),
+                    "orders.$.orderedAt": Datex,
                     "orders.$.creditOverdue": false,
                     "orders.$.creditPaidAt": Date.now(),
-                    credit : newCredit
+                    credit: newCredit,
                   },
                 }
               );
             }
           }
-        }
+        } else {
+          const user = await User.findOne({ enr: dat[0].user });
+          for (let i = 0; i < user.orders.length; i++) {
+            for (let j = 0; j < dat.length; j++) {
+              if (user.orders[i]._id == dat[j].id) {
+                var newCredit = user.credit;
+                if (user.orders[i].modeOfPayment == "credit") {
+                  var newCredit = user.credit + user.orders[i].itemPrice;
+                }
+                await User.updateMany(
+                  { enr: dat[j].user, "orders._id": dat[j].id },
+                  {
+                    $set: {
+                      "orders.$.isPaid": true,
+                      "orders.$.orderedAt": Date.now(),
+                      "orders.$.creditOverdue": false,
+                      "orders.$.creditPaidAt": Date.now(),
+                      credit: newCredit,
+                    },
+                  }
+                );
+              }
+            }
+          }
         }
 
-        break;
-      case "checkout.session.async_payment_succeeded":
-        const checkoutSessionAsyncPaymentSucceeded = event.data.object;
-        // Then define and call a function to handle the event checkout.session.async_payment_succeeded
-        console.log(checkoutSessionAsyncPaymentSucceeded);
-        break;
-      case "payment_intent.succeeded":
-        const paymentIntentSucceeded = event.data.object;
-        // Then define and call a function to handle the event payment_intent.succeeded
-        //console.log(paymentIntentSucceeded)
         break;
       // ... handle other event types
       default:
     }
-
     // Return a 200 response to acknowledge receipt of the event
     res.send();
   }
@@ -498,6 +455,7 @@ router.post("/paycred", ensureLogin, ensurePrice, async (req, res) => {
   res.redirect("/users/cart");
 });
 
+//refills credit of the user
 router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
   var or, c, ordd;
   const user = await User.findOne({
@@ -516,9 +474,7 @@ router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
       };
     }
   }
-  console.log(or)
   ordd = JSON.stringify(ordd);
-  console.log(ordd);
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: [or],
@@ -532,11 +488,9 @@ router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
   res.redirect(session.url);
 });
 
-
+//if routes do not match, we show this page
 router.get("*", async (req, res) => {
-  res.render('nopage');
+  res.render("nopage");
 });
-
-
 
 module.exports = router;

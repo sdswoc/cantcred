@@ -45,10 +45,6 @@ hbs.handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
   return arg1 == arg2 ? options.fn(this) : options.inverse(this);
 });
 
-//formatDate : function (date,format) {
-//  return moment(date).format(format)
-//}
-
 app.use(express.json()); //sends data in form of json objects
 app.use(express.urlencoded({ extended: false })); //body parser
 

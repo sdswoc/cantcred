@@ -21,23 +21,18 @@ const ensureLogin = function (req, res, next) {
   }
 };
 
-
-const stripeExists = async (req,res,next) => {
-  const vendor = await Vendor.findOne({username: req.session.vendorid})
-  if(vendor.stripeExists)
-  next();
-  else
-  res.render('venStr')
-}
-
-
+const stripeExists = async (req, res, next) => {
+  const vendor = await Vendor.findOne({ username: req.session.vendorid });
+  if (vendor.stripeExists) next();
+  else res.render("venStr");
+};
 
 router.get("/", async (req, res) => {
   if (req.session.vendorid == null) {
     const regmsg = req.query.Registration;
-    const isVerified = req.query.isVerified
-    const password = req.query.password
-    res.render("venHom", { regmsg , isVerified , password } );
+    const isVerified = req.query.isVerified;
+    const password = req.query.password;
+    res.render("venHom", { regmsg, isVerified, password });
   } else {
     res.redirect("/vendor/dashboard");
   }
@@ -53,7 +48,9 @@ router.post("/venReg", async (req, res) => {
     username: req.body.username,
     password: hash,
   };
-  const isAlreadyRegistered = await Vendor.findOne({ username: req.body.username });
+  const isAlreadyRegistered = await Vendor.findOne({
+    username: req.body.username,
+  });
   if (isAlreadyRegistered) {
     res.redirect("/vendor/?Registration=Failure");
   } else {
@@ -71,27 +68,23 @@ router.post("/venLog", async (req, res) => {
       isVerified: true,
     });
     if (await bcrypt.compare(req.body.password, user.password)) {
-    if (isVerified) 
-      {
+      if (isVerified) {
         req.session.vendorid = req.body.username;
         res.redirect("/vendor/dashboard");
-      } 
-      else {
-        res.redirect('/vendor/?isVerified=false');
+      } else {
+        res.redirect("/vendor/?isVerified=false");
       }
+    } else {
+      res.redirect("/vendor/?password=false");
     }
-      else {
-        res.redirect('/vendor/?password=false');
-    } 
-
   } else {
     res.send("vendor does not exists");
   }
 });
 
 router.get("/dashboard", ensureLogin, stripeExists, async (req, res) => {
-  const vendor = await Vendor.findOne({username:req.session.vendorid})
-  const items= await Items.find({vendorName: req.session.vendorid})
+  const vendor = await Vendor.findOne({ username: req.session.vendorid });
+  const items = await Items.find({ vendorName: req.session.vendorid });
   const user = await User.find({ "orders.vendorName": req.session.vendorid });
   const len = user.length;
   let curord = [];
@@ -108,13 +101,11 @@ router.get("/dashboard", ensureLogin, stripeExists, async (req, res) => {
       }
     }
   }
-  console.log(curord);
-  const length = curord.length
-  res.render("venDas", { vendor , items , curord , length });
+  const length = curord.length;
+  res.render("venDas", { vendor, items, curord, length });
 });
 
-
-router.post("/itemadd", ensureLogin , stripeExists, async (req, res) => {
+router.post("/itemadd", ensureLogin, stripeExists, async (req, res) => {
   const vendor = await Vendor.findOne({ username: req.session.vendorid });
   const product = await stripe.products.create({
     name: req.body.itemName,
@@ -140,28 +131,26 @@ router.post("/itemadd", ensureLogin , stripeExists, async (req, res) => {
   await Items.insertMany([ItemData]);
   Items.find({ vendorName: req.session.vendorid }, (err, items) => {
     if (err) {
-      console.log(err);
     } else {
       nm = "Welcome " + req.session.vendorid;
-      res.redirect('/vendor/dashboard')
+      res.redirect("/vendor/dashboard");
     }
   });
 });
 
-router.get("/logout", ensureLogin ,  (req, res) => {
+router.get("/logout", ensureLogin, (req, res) => {
   req.session.destroy();
-  res.redirect('/')
+  res.redirect("/");
 });
 
 router.get("/register", (req, res) => {
   if (req.session.vendorid == null) {
-    const regmsg = req.query.Registration
-    res.render("venReg" , {regmsg});
+    const regmsg = req.query.Registration;
+    res.render("venReg", { regmsg });
   } else {
     res.redirect("/vendor/dashboard");
   }
-  }
-);
+});
 
 router.get("/login", (req, res) => {
   if (req.session.vendorid == null) {
@@ -171,9 +160,7 @@ router.get("/login", (req, res) => {
   }
 });
 
-
-
-router.get("/credit", ensureLogin  ,stripeExists, async (req, res) => {
+router.get("/credit", ensureLogin, stripeExists, async (req, res) => {
   const user = await User.find();
   var uslen = user.length;
   var ord = [];
@@ -192,7 +179,7 @@ router.get("/credit", ensureLogin  ,stripeExists, async (req, res) => {
   res.render("venCrd", { ord });
 });
 
-router.get("/itemadd" , ensureLogin, stripeExists, (req, res) => {
+router.get("/itemadd", ensureLogin, stripeExists, (req, res) => {
   res.render("itemadd");
 });
 
@@ -200,19 +187,17 @@ router.post("/delete/:id", ensureLogin, stripeExists, async (req, res) => {
   try {
     await Items.remove({ _id: req.params.id });
     Items.find({ vendorName: req.session.vendorid }, (err, items) => {
-      if (err) {
-        console.log(err);
-      } else {
+      if (err) {}
+       else {
         nm = "Welcome " + req.session.vendorid;
-        res.redirect('/vendor/dashboard');
+        res.redirect("/vendor/dashboard");
       }
     });
   } catch (err) {
-    console.log(err);
   }
 });
 
-router.post("/change/:id", ensureLogin ,stripeExists, async (req, res) => {
+router.post("/change/:id", ensureLogin, stripeExists, async (req, res) => {
   try {
     const val = await Items.findOne(
       { _id: req.params.id },
@@ -225,20 +210,18 @@ router.post("/change/:id", ensureLogin ,stripeExists, async (req, res) => {
     }
     Items.find({ vendorName: req.session.vendorid }, (err, items) => {
       if (err) {
-        console.log(err);
+        
       } else {
         nm = "Welcome " + req.session.vendorid;
-        res.redirect('/vendor/dashboard');
+        res.redirect("/vendor/dashboard");
       }
     });
   } catch (err) {
-    console.log(err);
+    
   }
 });
 
-
-
-router.post("/complete/:id", ensureLogin, stripeExists,async (req, res) => {
+router.post("/complete/:id", ensureLogin, stripeExists, async (req, res) => {
   await User.updateMany(
     { "orders._id": req.params.id },
     {
@@ -250,8 +233,8 @@ router.post("/complete/:id", ensureLogin, stripeExists,async (req, res) => {
   res.redirect("/vendor/dashboard");
 });
 
-router.get("/pastorders", ensureLogin, stripeExists,async (req, res) => {
-  console.log(req.session.vendorid);
+router.get("/pastorders", ensureLogin, stripeExists, async (req, res) => {
+  
   const user = await User.find({ "orders.vendorName": req.session.vendorid });
   const len = user.length;
   let pastord = [];
@@ -268,7 +251,7 @@ router.get("/pastorders", ensureLogin, stripeExists,async (req, res) => {
       }
     }
   }
-  console.log(pastord);
+ 
   res.render("venPasOrd", { pastord });
 });
 
@@ -282,9 +265,9 @@ router.post("/acceptpayments", ensureLogin, async (req, res) => {
     });
     await Vendor.updateOne(
       { username: req.session.vendorid },
-      { stripeID: account.id , stripeExists : true}
-       );
-       res.redirect('back')
+      { stripeID: account.id, stripeExists: true }
+    );
+    res.redirect("back");
   } else {
     const vendor = await Vendor.findOne({ username: req.session.vendorid });
     const accountLink = await stripe.accountLinks.create({
@@ -298,11 +281,7 @@ router.post("/acceptpayments", ensureLogin, async (req, res) => {
 });
 
 router.get("*", async (req, res) => {
-  res.render('nopage');
+  res.render("nopage");
 });
 
-
-
-
 module.exports = router;
-
