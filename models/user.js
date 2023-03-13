@@ -5,7 +5,8 @@ const userDetailsSchema = new mongoose.Schema({
   name: { type: String },
   enr: { type: String, unique: true },
   email: { type: String, unique: true, default: "" },
-  mob: { type: Number, unique: true, default: 0 },
+  mob: { type: String},
+  isVerified : {type: Boolean , default: false},
   credit: { type: Number, default: 200 },
   orders: [
     {

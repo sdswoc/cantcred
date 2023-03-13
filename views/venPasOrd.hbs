@@ -3,20 +3,28 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Cart</title>
+    <title>Past Orders</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
   </head>
   <body>
-    <h3>PAST ORDERS</h3>
-    <br />
+    {{>vendorNavbar}}
+    <div class="container">
+      <div class="row"><div class="row"><div class="row"></div></div></div>
+    
+      
+      <div class="purple darken-1 white-text text-lighten-5" 
+      style="border-top-right-radius: 15px; border-top-left-radius:15px ;  padding:1% 2% 1% 2%;">
+    <span style="font-size: 250%;">PAST ORDERS</span>
+    </div>
+   
 
     {{#if pastord}}
-      <table>
+      <table class="purple lighten-5"style="font-size: 67%;">
         <tr>
-          <th>ID</th>
+          
           <th>Name</th>
           <th>Enrollment</th>
           <th>Item Name</th>
@@ -28,7 +36,7 @@
         </tr>
         {{#each pastord}}
           <tr>
-            <td>{{this._id}}</td>
+            
             <td>{{this.userName}}</td>
             <td>{{this.userEnr}}</td>
             <td>{{this.itemName}}</td>
@@ -41,5 +49,7 @@
         {{/each}}
       </table>
     {{/if}}
+    </div>
+    </div>
   </body>
 </html>

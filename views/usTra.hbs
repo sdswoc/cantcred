@@ -6,7 +6,7 @@
 credits left:
 {{credit}}
 <br />
-{{#if ord}}
+{{#if pastord}}
   <table>
     <tr>
       <th>Item Name</th>
@@ -16,7 +16,7 @@ credits left:
       <th>Date & Time of Order</th>
       <th>Date & Time of Refill</th>
     </tr>
-    {{#each ord}}
+    {{#each pastord}}
       <tr>
         <td>{{this.itemName}}</td>
         <td>{{this.itemPrice}}</td>

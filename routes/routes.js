@@ -24,10 +24,7 @@ router.get("/", async (req, res) => {
   res.render("home");
 });
 
-//about page route
-router.get("/about", (req, res) => {
-  res.render("about");
-});
+
 
 //Verification process starts
 router.get("/channeli", passport.authenticate("oauth2"));
@@ -88,5 +85,7 @@ passport.use(
   )
 );
 //verification process ends
+
+
 
 module.exports = router;

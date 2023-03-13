@@ -12,15 +12,24 @@ router.use(express.urlencoded({ extended: false })); //body parse
 router.use(express.static(__dirname));
 
 //middleware to ensure session is active
-const ensureLogin = function (req, res, next) {
-  if (req.session.userid != null) next();
+const ensureLogin = async function (req, res, next) {
+  if (req.session.userid != null) 
+  {
+    const user = await User.findOne({enr:req.session.userid})
+    const enrol = user.enr
+    if (user.mob)
+    next();
+    else
+    res.redirect("/users/onboarding/?enrol=" + enrol);
+
+  }
   else res.redirect("/");
 };
 // middleware to ensure that credit limit is set to 200
 const ensurePrice = async function (req, res, next) {
   const user = await User.findOne({ enr: req.session.userid });
   if (user.credit - req.session.price < 0) {
-    res.send("credit limit reached");
+    res.redirect('http://localhost:4000/users/cart/?creditLim=true');
   } else {
     next();
   }
@@ -37,20 +46,37 @@ router.get("/", (req, res) => {
 });
 
 //onboarding of student for first time login
-router.get("/onboarding/", ensureLogin, async (req, res, next) => {
+router.get("/onboarding", async (req, res, next) => {
   const enrol = req.query.enrol;
+  req.session.userid = enrol
   const user = await User.findOne({ enr: enrol });
-  if (user.mob == 0) {
-    res.render("usOnb");
-  } else {
-    res.redirect("/users/dashboard");
+  console.log(enrol)
+  console.log(user)
+  console.log(req.session.userid)
+  if(user){
+    if (!user.isVerified) {
+      res.render('usOnb')
+    } else {
+      res.redirect("/users/dashboard");
+    }}
+    else{
+      res.redirect('/users')
   }
+ 
 });
 
 //updating number after onboarding
-router.post("/number", ensureLogin, async (req, res) => {
-  await User.updateOne({ enr: req.session.userid }, { mob: req.body.number });
+router.post("/number",  async (req, res) => {
+  console.log(req.session.userid)
+  const mob = await User.findOne ({mob : req.body.number})
+  if (!mob){
+  await User.updateOne({ enr: req.session.userid }, { mob: req.body.number, isVerified:true });
   res.redirect("/users/dashboard");
+  }
+  else{
+  const alreadyExists = true
+  res.render('usOnb' , {alreadyExists})}
+  
 });
 
 //dashboard of the user
@@ -86,7 +112,8 @@ router.get("/profile", ensureLogin, async (req, res) => {
 router.get("/menu/", ensureLogin, (req, res, next) => {
   Items.find({ vendorName: req.query.vendorName }, (err, items) => {
     nm = "welcome " + req.session.userid;
-    vendorName = items[0].vendorName
+    console.log(items)
+     vendorName = req.query.vendorName
     console.log(vendorName)
     res.render("usMen", { items, nm , vendorName});
   });
@@ -103,26 +130,37 @@ router.get("/orders", ensureLogin, async (req, res) => {
 router.get("/credit", ensureLogin, async (req, res) => {
   const user = await User.findOne({ enr: req.session.userid });
   const credit = user.credit;
-  var ord = [];
+  var ord = []; 
+  var pastord = [];
   var len = 0;
   if (user.orders) {
     len = user.orders.length;
   }
-  var isExists = false;
   for (let i = 0; i < len; i++) {
     if (
       user.orders[i].isActive == false && user.orders[i].isPaid == true && user.orders[i].creditOverdue == true
     ) {
       ord.push(user.orders[i]);
-      isExists = true;
+    }
+    if (
+      user.orders[i].isActive == false &&
+      user.orders[i].isPaid == true &&
+      user.orders[i].creditOverdue == false &&
+      user.orders[i].modeOfPayment == "credit"
+    ) {
+      pastord.push(user.orders[i]);
     }
   }
   console.log(ord)
-  res.render("usCre", { credit, ord , isExists});
+  res.render("usCre", { credit, ord , pastord});
 });
 
 //shows the cart of the user , we determine the price of the items which are only in the cart , to be in cart , order must be not paid , but shall be active
-router.get("/cart", ensureLogin, async (req, res) => {
+router.get("/cart", ensureLogin,  async (req, res) => {
+  var credmsg = false
+  console.log(req.query.creditLim)
+  if(req.query.creditLim){
+  credmsg = req.query.creditLim}
   const user = await User.findOne({
     enr: req.session.userid,
     "orders.isPaid": false,
@@ -132,6 +170,7 @@ router.get("/cart", ensureLogin, async (req, res) => {
   if (user) {
     const ord = user.orders;
     const len = ord.length;
+    const credit = user.credit
     var pr = 0; var isExists = true;
     for (let i = 0; i < len; i++) {
       if (ord[i].isActive == true && ord[i].isPaid == false) {
@@ -139,7 +178,7 @@ router.get("/cart", ensureLogin, async (req, res) => {
       }
     }
     req.session.price = pr;
-    res.render("usCar", { ord, pr , isExists });
+    res.render("usCar", { ord, pr , isExists , credmsg, credit});
   } else {
     isExists = false;
     res.render("usCar" , {isExists});
@@ -149,7 +188,7 @@ router.get("/cart", ensureLogin, async (req, res) => {
 router.get("/credit/transactions", ensureLogin, async (req, res) => {
   const user = await User.findOne({ enr: req.session.userid });
   const credit = user.credit;
-  var ord = [];
+  var pastord = [];
   var len = 0;
   if (user.orders) {
     len = user.orders.length;
@@ -161,11 +200,10 @@ router.get("/credit/transactions", ensureLogin, async (req, res) => {
       user.orders[i].creditOverdue == false &&
       user.orders[i].modeOfPayment == "credit"
     ) {
-      ord.push(user.orders[i]);
+      pastord.push(user.orders[i]);
     }
   }
-  console.log(ord);
-  res.render("usTra", { credit, ord });
+  res.render("usTra", { credit, pastord });
 });
 
 //destroys sessoin
@@ -213,7 +251,6 @@ router.post("/book/:id", ensureLogin, async (req, res) => {
           user.orders[i].itemID == item._id &&
           user.orders[i].isPaid == false
         ) {
-          res.redirect('back');
           check = 1;
           break;
         }
@@ -265,6 +302,7 @@ router.post("/book/:id", ensureLogin, async (req, res) => {
         }
       }
     }
+    res.redirect('back')
   }
 });
 
@@ -278,20 +316,7 @@ router.post("/cart/delete/:id", ensureLogin, async (req, res) => {
       },
     }
   );
-  /*const user = await User.findOne({ enr: req.session.userid });
-  const ord = user.orders;
-  const len = ord.length;
-  console.log(len);
-  var pr = 0;
-  for (let i = 0; i < len; i++) {
-    if (ord[i].isActive == true) {
-      pr -= ord[i].totalPrice;
-    }
-  }
-  pr = pr * -1; //fixes bug which shows price in negative when an item is deleted
-  req.session.price = pr;*/
   res.redirect("/users/cart")
-  //res.render("usCar", { ord, pr });
 });
 
 // sends request to  stripe
@@ -505,32 +530,13 @@ router.post("/refillcredit/:id", ensureLogin, async (req, res) => {
     cancel_url: "http://localhost:4000/users/dashboard",
   });
   res.redirect(session.url);
-
-  /*var pr = 0;
-  const user = await User.findOne({ enr: req.session.userid });
-  const ord = user.orders;
-  var len = 0;
-  if (user.orders) 
-    len = user.orders.length;
-  }
-  for (let i = 0; i < len; i++) {
-    if (user.orders[i]._id == req.params.id) {
-      pr = user.orders[i].totalPrice;
-    }
-  }
-  const newCred = user.credit + pr;
-  await User.updateMany(
-    { enr: req.session.userid, "orders._id": req.params.id },
-    {
-      credit: newCred,
-      $set: {
-        "orders.$.creditOverdue": false,
-        "orders.$.creditPaidAt": Date.now(),
-      },
-    }
-  );
-  console.log("hello " + req.params.id);
-  res.redirect("/users/credit");*/
 });
+
+
+router.get("*", async (req, res) => {
+  res.render('nopage');
+});
+
+
 
 module.exports = router;

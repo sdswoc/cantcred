@@ -27,7 +27,11 @@
     <div class="col l12 xl12 m12 s12">
     <div class="table">
       <span style="font-size:130%;">{{itemName}}</span>
+      {{#if avail}}
       <span style="float:right">{{>addtocart}}</span>
+      {{else}}
+       <span style="float:right">{{>disabled}}</span>
+       {{/if}}
       <br><span class="material-symbols-outlined" style="size:16px" >
 currency_rupee
 </span><span style="position:relative; top:-5px">{{itemPrice}}</span>

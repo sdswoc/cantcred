@@ -1,12 +1,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
 
-<h6>Vendor's Menu </h6>
-<h3>{{nm}}</h3>
-{{>addbutton}}
-<p>Here are your listed items</p>
+
+<div class="row"></div>
+<span style="float: right; position:relative;">{{>addbutton}}</span>
+<br>
+<span class="purple-text text-darken-2" style="font-size: 150%; font-weight:bold"> MENU </span>
+<br>
 {{#if items}}
-    <table class="striped">
+    <table class=" purple lighten-5 striped purple-text text-darken-2" style="border-radius: 10px;">
       <thead>
         <th>Item Name</th>
         <th>Item Price</th>
@@ -21,18 +23,19 @@
 
               <td>{{itemPrice}}</td>
 
-              <td><span class="dash-avail">{{avail}}
+              <td><div class="dash-avail">
                     <form action ="/vendor/change/{{_id}}" method="POST" id="change-item">
+                    {{avail}} &nbsp;
                     <input type="hidden" name="method" value="CHANGE">
-                    <button type="submit" class="btn green">CHANGE</button>
+                    <button type="submit" class="btn purple lighten-4 purple-text text-darken-4">CHANGE</button>
                     </form>
-                  </span>
+                  </div>
               </td>
 
               <td>             
               <form action ="/vendor/delete/{{_id}}" method="POST" id="delete-item">
                  <input type="hidden" name="method" value="DELETE">
-                 <button type="submit" class="btn red">DELETE</button>
+                 <button type="submit" class="btn purple darken-4">DELETE</button>
               </form>
               </td>
 

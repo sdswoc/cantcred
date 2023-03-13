@@ -10,24 +10,32 @@
     />
   </head>
   <body>
-    <h3>Credit Overdue Details</h3>
-    <br />
+    {{>vendorNavbar}}
+    <div class="row"><div class="row"></div></div>
+    <div class="row"></div>
+    <div class="container">
+       
+      <div class="purple darken-1 white-text text-lighten-5" 
+      style="border-top-right-radius: 15px; border-top-left-radius:15px ;  padding:1% 2% 1% 2%;">
+    <span style="font-size: 250%;">Credit Overdue Details</span>
+    </div>
+    
 
     {{#if ord}}
-      <table>
+      <table style="font-size:67%" class="purple lighten-5">
         <tr>
-          <th>ID</th>
+         
           <th>Name</th>
           <th>Enrollment</th>
           <th>Item Name</th>
           <th>Price </th>
           <th>Quantity</th>
           <th>Total Price</th>
-          <th>Date & Time of Order</th>
+          <th>Date & Time</th>
         </tr>
         {{#each ord}}
           <tr>
-            <td>{{this._id}}</td>
+           
             <td>{{this.userName}}</td>
             <td>{{this.userEnr}}</td>
             <td>{{this.itemName}}</td>
@@ -41,5 +49,6 @@
     {{else}}
       <h4>No Credit Overdue</h4>
     {{/if}}
+    </div>
   </body>
 </html>

@@ -14,14 +14,38 @@
 
 {{>navbar}}
 <div class="container">
-<br><br>
+<br><br><br> <div class="row"><div class="row"><div class="row"></div></div></div>
   {{#if isExists}}
  {{#if ord}}
-<table class="purple lighten-3 striped">
+
+
+
+
+ 
+  
+
+
+     <div class="price purple-text text-darken-4" style="font-size: 140%;"> <span style="font-weight:bold">{{credit}}</span>
+          credits left
+   </div>
+
+<div class="price purple-text text-darken-4" style="font-size: 140%; font-weight:bold">Total Price : {{pr}} 
+   </div>
+
+    
+    <div class="row">
+      <div class="col "> {{>paybutton}} </div>
+     
+    {{>paynow}}
+    </div>
+    {{#if credmsg}}
+    {{>creditLimitReached}}
+    {{/if}}
+<table class="left-align striped purple-text text-darken-4 purple lighten-4" style="font-size: 80%; border-radius:15px" >
   <tr>
     <th>Vendor Name</th>
     <th>Item Name</th>
-    <th>Price of each item </th>
+    <th>Price</th>
     <th>Quantity</th>
     <th>Total Price</th>
     <th></th>
@@ -31,7 +55,7 @@
        {{#if isPaid}}
 
        {{else}}
-  <tr>
+  <tr >
     <td>{{vendorName}}</td>
     <td>{{itemName}}</td>
     <td>{{itemPrice}}</td>
@@ -41,7 +65,7 @@
        
        <form action ="/users/cart/delete/{{_id}}" method="POST" id="delete-item">
                  <input type="hidden" name="method" value="DELETE">
-                 <button type="submit" class="btn red">DELETE</button>
+                 <button type="submit" class="btn purple darken-5 purple-text text-lighten-5">DELETE</button>
               </form>
     </td>
   </tr>
@@ -50,28 +74,27 @@
   {{/each}}
 </table>
 {{/if}}
-    Total Price : {{pr}}
-    <br>
-    <br>
-    {{>paybutton}} <br>
-    {{>paynow}}
+ 
+    
     {{else}}
     <div class="container">
       <br><br>  
       <div class="row hide-on-small-only"></div>
        <div class="row hide-on-small-only"></div>
-        <div class="row hide-on-small-only"></div>
-         <div class="row hide-on-small-only"></div>
-          <div class="row hide-on-small-only"></div>
-           <div class="row hide-on-small-only"></div>
-            <div class="row hide-on-small-only"></div>
-             <div class="row hide-on-small-only"></div>
+       
+          
               
      
-     <img class="responsive-img"src="../public/images/emptycart.png">
+     <img class="responsive-img" src="../public/images/emptycart.png">
+
      <div class="row"><div class="row"></div></div>
-     <span style="font-size:200%; color:#4a148c"> You  do not have any items in your cart</span>
-          </div>
+     <div class="row">
+      <div class="col l2 s12 m12"></div>
+      <div class="col"> <span style="font-size:200%; color:#4a148c">You  do not have any items in your cart</span>
+          </div></div>
+     
+     </div>
+     
    
     {{/if}}
     </div>

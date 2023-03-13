@@ -58,8 +58,8 @@ app.use(express.static(__dirname));
 app.use("/", routes); //calls routes
 app.use("/users", userRoute); // calls user route
 app.use("/vendor", vendorRoute); //calls venddor route
-app.get("/home", (req, res) => {
-  res.render("usHom");
+app.get("*", (req, res) => {
+  res.render("nopage");
 });
 
 //listens to port

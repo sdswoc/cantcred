@@ -29,6 +29,7 @@
 
 <div class="row">
   {{#each vendors}}
+  {{#if stripeExists}}
   <div class="col s12 m6 l3">
     <div class="card hoverable">
       <div class="card-content">
@@ -40,6 +41,7 @@ fastfood
      </div>
     </div>
   </div>
+  {{/if}}
   {{/each}}
 </div>
 

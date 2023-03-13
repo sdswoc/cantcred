@@ -11,98 +11,54 @@
     <link rel="stylesheet" href="../public/css/venhom.css" />
   </head>
   <body>
-    <div class="main">
+      {{>vendorNavbar}}
       <div class="row">
         <div class="col l12 s12 m12">
           {{#ifEquals regmsg "Success"}}
-            <div class="card green lighten-3 green-text text-darken-3">
-              You have been registered succesfully , please wait for the
-              verification process
-            </div>
+            {{>successRegistered}}
           {{/ifEquals}}
           {{#ifEquals regmsg "Failure"}}
-            <div class="card red lighten-3 brown-text text-darken-3">
-              You have already registered, kindly login or wait for verification
-              process to complete.
-            </div>
+           
+             {{>alreadyRegistered}}
           {{/ifEquals}}
         </div>
-        <div class="col xl9 l9 m6 hide-on-small-only">
-          <div class="col hey">
-            <div class="logo col l3 m9 offset-l5">
-              <img class="responsive-img" src="../public/images/logo.png" />
-            </div>
-          </div>
-          <p class="p"> VENDOR'S PORTAL</p>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-        </div>
-        <div class="divider"></div>
-        <div class="float-left col xl3 l3 m6 s12 bg-image">
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row"></div>
-          <div class="row">
-            <div class="row"></div>
-            <div class="row"></div>
-            <div class="col l10 s8 m9 offset-s2 offset-l1">
-              <div class="card hoverable">
-                <div class="card-content">
-                  <a
-                    href="http://localhost:4000/vendor/login"
-                    class="waves-effect waves-light btn-flat white purple-text"
-                    style="width:100% ;"
-                  >
-                    Login</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col l10 s8 m9 offset-s2 offset-l1">
-              <div class="card hoverable">
-                <div class="card-content">
-                  <a
-                    href="http://localhost:4000/vendor/register"
-                    class="waves-effect waves-light btn-flat white purple-text"
-                    style="width:100% ;"
-                  >
-                    register</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="divider"></div>
+      <div class="container">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row">
+          <div class="col xl4 offset-xl4 l4 m8 offset-m2 offset-l4  s12 ">
+           {{#ifEquals isVerified "false"}}
+          <div class="card purple darken-3 purple-text text-lighten-3" style="border-radius: 10px; font-size:120%; font-weight:600; text-align:center">
+           YOU HAVE NOT BEEN VERIFIED YET !
+           </div>
+            {{/ifEquals}}
+            {{#ifEquals password "false"}}
+          <div class="card purple darken-3 purple-text text-lighten-3" style="border-radius: 10px; font-size:120%; font-weight:600; text-align:center">
+           WRONG PASSWORD !
+           </div>
+          {{/ifEquals}}
+          </div>
+        <div class="col xl4 offset-xl4 l4 m8 offset-m2 offset-l4  s12 purple lighten-5" style="border-radius:20px">
+         
+          <div class="row"></div>
+          {{>vendorLogin}}
+          <div class="row"></div>
+          <span class="purple-text text-darken-4">Not a vendor ? register <a href="http://localhost:4000/vendor/register" class ="purple-text text-lighten-1" style="font-weight: bold;"> here</a></span>
+          <div class="row"></div>
+        </div>
+        </div>
+        
+      </div>
     </div>
   </body>
 </html>

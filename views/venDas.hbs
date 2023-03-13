@@ -1,10 +1,122 @@
-<link
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor</title>
+  <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
 />
+ <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,-25"
+    />
 
-Vendor ka dashboard
+</head>
+<body>
+  
+{{>vendorNavbar}} <div class="row "></div>
+  <div class="row "></div>
+  <div class="row"></div><div class="row hide-on-small-only"></div>
+  <div class="row hide-on-small-only"></div>
+<div class="container" style=" border: solid 1px #7b1fa2;
+  border-radius: 10px; ">
+    
+  
+  
+ 
+  
+  <div class="col l12 xl12 m12 s12">
+  <div class="header purple-text text-lighten-4 s12 purple" style="border-top-right-radius: 10px;border-top-left-radius:10px; padding:2% 2% 2% 2%">
+    <span class="white-text"style="font-weight:bold;   font-family:Helvetica; font-size: 220%;">{{vendor.username}}</span> <br><br>
+    <span style="font-weight:400;   font-family:Helvetica; font-size: 130%;"> {{vendor.email}}</span> <br>
+    <span style="font-weight;400;   font-family:Helvetica; font-size: 130%;"> {{vendor.mob}}</span> 
+  </div>
+
+<div class="links" style="padding: 0 0 0 2%;">
+<div class="row"></div>
+
+<a href="/vendor/pastorders" style="color:#4a148c; font-weight:bold; text-decoration:underline">PAST ORDERS</a> ||
+<a href="/vendor/credit" style="color:#4a148c; font-weight:bold; text-decoration:underline">PENDING CREDIT </a> <br>
+<form action="/vendor/acceptpayments" method="post">
+  <button class="btn-flat purple-text text-darken-4"type="submit" style="font-weight: bold; text-decoration:underline; padding:0px 0px 0px 0px">CONFIGURE PAYMENT</button>
+ </form>
+<a href="https://dashboard.stripe.com/" target="_blank" style="color:#4a148c; font-weight:bold; text-decoration:underline">STRIPE ACOUNT
+</a> <br>
+<a href="/vendor/logout" style="color:#4a148c; font-weight:bold; text-decoration:underline">LOGOUT</a> 
 <br />
+ 
+<div class="row"></div>
+<div class="divider"></div>
+</div>
+
+  <div class="current-orders" style="padding:2% 2% 2% 2%">
+    
+    
+    {{#if curord}}
+   
+     <header class="purple-text text-darken-3 s12" style="font-size: 160%;" >
+      You have <span style="font-weight:bold ;">{{length}}</span> pending order(s)
+     </header>
+    <br />
+    <br />
+            {{#each curord}}
+            <div class="row">
+              <div class="col xl10 l10 offset-xl1 offset-l1 purple-text text-darken-3" >
+                <span style="font-weight: bolder; font-size: 80%;"><span
+                    class="material-symbols-outlined" style="position:relative ; top:4px;"
+                  >
+                    dinner_dining
+                  </span >{{itemName}}</span>
+                <br />
+                {{quantity}}
+                x
+                {{itemPrice}}&nbsp&nbsp&nbsp || &nbsp&nbsp&nbsp
+                {{totalPrice}}
+                &nbsp&nbsp&nbsp || &nbsp&nbsp&nbsp
+                {{userName}}
+
+                &nbsp&nbsp&nbsp || &nbsp
+                {{userEnr}}
+               <div class="row"></div>
+
+                <form
+                action="/vendor/complete/{{_id}}"
+                method="POST"
+                id="complete-item"
+              >
+                
+                <button type="submit" class="btn white purple-text text-darken-4 btn-small" style="font-size: 80%; font-weight:bold; border:solid 1px #4a148c ">delivered</button>
+              </form>
+              </div>
+              </div>        
+               {{/each}}    
+              </div>
+          
+           
+             
+            
+          
+       
+      </table>
+      {{else}}
+      <header class="purple-text text-darken-3 s12" style="font-size: 160%;" >
+      You have <span style="font-weight:bold ;">{{length}}</span> pending order(s)
+     </header>
+    {{/if}}
+  
+  
+  
+  <div class="menu" style="padding: 0 2% 2% 2%" >
+    {{>menu}}
+    </div>
+</div>
+
+
+
+<!--
 {{msg}}
 <br />
 <a href="/vendor/menu">View Menu</a>
@@ -20,3 +132,7 @@ Vendor ka dashboard
 <br />
 <a href="https://dashboard.stripe.com/" target="_blank">Stripe account
 </a>
+--> 
+</body>
+</html>
+

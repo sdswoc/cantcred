@@ -7,6 +7,7 @@ const vendorDetailsSchema = new mongoose.Schema({
   mob: { type: String, default: "" },
   isVerified: { type: Boolean, default: false },
   stripeID: { type: String, default: "" },
+  stripeExists: { type: Boolean, default: false }
 });
 
 const Vendor = mongoose.model("vendor", vendorDetailsSchema);
