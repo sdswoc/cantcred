@@ -1,6 +1,6 @@
 # CANTCRED 
 
-This is my submission for winter of code 2023 conducted by [SDS labs](https://github.com/sdslabs), IIT Roorkee.
+This is my submission for winter of code 2023 conducted by [SDSLabs](https://github.com/sdslabs), IIT Roorkee.
 
 ## About
 
