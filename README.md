@@ -65,5 +65,3 @@ Cantcred is a web app to connect users and vendors across the R-land for the R-j
 ## Mentors 
 **[Tanmay Bajaj](https://github.com/Frey0-0)**
 **[Gurmannat Sohal](https://github.com/itsgurmannatsohal)**
-
-
