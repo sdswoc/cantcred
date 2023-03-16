@@ -1,0 +1,52 @@
+*{
+    font-family:  Helvetica;
+}
+
+.hey{
+    background-color: #7b1fa2 ;
+    color: white;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    
+}
+
+.name{
+    font-size: 270%;
+}
+
+.content{
+    font-size:large;
+    
+
+}
+
+.hmm{
+    color:#4a148c;
+   
+    
+}
+
+.currord-header{
+   
+    font-size: 250%;
+}
+
+.man{
+  
+  border: solid 1px #7b1fa2;
+  border-radius: 10px;
+}
+
+.logout{
+    position: relative;
+    top:-4px;
+}
+
+.table{
+    padding: 1% 0 1% 1%;
+    /*background-color: #f3e5f5;*/
+   /* border: solid #7b1fa2 1px;*/
+    border-radius: 15px;
+    font-size: 120%;
+}
+

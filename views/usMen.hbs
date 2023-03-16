@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Menu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="../public/css/usMen.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,-25" />
+</head>
+<body>
+{{>navbar}}
+
+</div>
+  <div class="container">
+    <div class="row hide-on-small-only"></div>
+    <div class="row hide-on-small-only"></div>
+    <div class="row"></div>
+<div class="header">
+  <span style="font-size: 200%; color:#ce93d8; ">Menu of   &nbsp;            </span> 
+  <span style="font-size: 250%; color:#ba68c8  ;  font-weight:bold">{{vendorName}}</span> </div>
+<div class="divider"></div>
+<br>
+   <div class="row" style="color:#4a148c  ">
+    {{#each items}}
+    <div class="col l12 xl12 m12 s12">
+    <div class="table">
+      <span style="font-size:130%;">{{itemName}}</span>
+      {{#if avail}}
+      <span style="float:right">{{>addtocart}}</span>
+      {{else}}
+       <span style="float:right">{{>disabled}}</span>
+       {{/if}}
+      <br><span class="material-symbols-outlined" style="size:16px" >
+currency_rupee
+</span><span style="position:relative; top:-5px">{{itemPrice}}</span>
+      <br><br>
+    </div>
+    </div>
+    {{/each}}
+  </div>
+</div>
+</body>
+</html>
+
+

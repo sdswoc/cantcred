@@ -1,0 +1,52 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+     <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+ 
+  </head>
+  <body>
+    {{>vendorNavbar}}
+
+    <div class="row">
+        <div class="col l12 s12 m12">
+          {{#ifEquals regmsg "Success"}}
+            {{>successRegistered}}
+          {{/ifEquals}}
+          {{#ifEquals regmsg "Failure"}}
+           
+             {{>alreadyRegistered}}
+          {{/ifEquals}}
+        </div>
+      </div>
+
+
+     <div class="container">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+     
+        <div class="row">
+        <div class="col xl4 offset-xl4 l4 m8 offset-m2 offset-l4  s12 purple lighten-5" style="border-radius:20px">
+          <div class="row"></div>
+          {{>vendorRegister}}
+           <div class="row"></div>
+          <span class="purple-text text-darken-4" style="font-weight: 400;">Already registered ? <a href="http://localhost:4000/vendor/" class ="purple-text text-lighten-1" style="font-weight: bold;"> login</a></span>
+          <div class="row"></div>
+        </div>
+        </div>
+        
+      </div>
+
+
+  </body>
+</html>

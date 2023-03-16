@@ -1,0 +1,72 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Onboarding</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  </head>
+  <body>
+    <html>
+      <body>
+           <div class ="navbar-fixed">
+ <nav>
+    <div class="nav-wrapper purple darken-3">
+      <a href="#" class="brand-logo center">
+        <img href="#"   class="responsive-img" src="/public/images/logo.png" style="  width: 160px;
+    padding-top: 10px"/>
+      </a>
+    </div>
+  </nav>
+ </div>
+
+  <div class="container">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+     
+        <div class="row">
+        <div class="col xl4 offset-xl4 l4 m8 offset-m2 offset-l4  s12 purple lighten-5" style="border-radius:20px">
+          {{#if alreadyExists}}
+          <div class="card purple darken-3 purple-text text-lighten-3" style="border-radius: 10px; font-size:120%; font-weight:600; text-align:center">
+           THIS NUMBER ALREADY EXISTS !
+           </div>
+           {{/if}}
+          <div class="row"></div>
+        <div class="purple-text text-darken-4">Before we proceed further , we need to verify you , this is a one
+          time process</div>
+          <div class="row">
+            <div class="row"></div>
+          </div>
+        <form method="POST" action="/users/number">
+        <i class="material-icons small purple-text text-darken-4">local_phone
+
+</i>
+          <input type="text" name="number" id="" required placeholder="PHONE NUMBER.." style=" border-bottom: 1px solid #4a148c" min="5000000000" max="9999999999"required /><br />
+          <div class="row"></div>
+           <input type="submit"  class="waves-effect waves-light  btn-flat white purple-text text-darken-4 hoverable" style="border-radius: 10px; border:solid 1px #4a148c; font-weight:bold"/>
+     
+        </form>
+           <div class="row"></div>
+         
+        </div>
+        </div>
+        
+      </div>
+        
+    
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Past Orders</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+  </head>
+  <body>
+    {{>vendorNavbar}}
+    <div class="container">
+      <div class="row"><div class="row"><div class="row"></div></div></div>
+    
+      
+      <div class="purple darken-1 white-text text-lighten-5" 
+      style="border-top-right-radius: 15px; border-top-left-radius:15px ;  padding:1% 2% 1% 2%;">
+    <span style="font-size: 250%;">PAST ORDERS</span>
+    </div>
+   
+
+    {{#if pastord}}
+      <table class="purple lighten-5"style="font-size: 67%;">
+        <tr>
+          
+          <th>Name</th>
+          <th>Enrollment</th>
+          <th>Item Name</th>
+          <th>Price </th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Date & Time</th>
+          <th>Mode of Payment</th>
+        </tr>
+        {{#each pastord}}
+          <tr>
+            
+            <td>{{this.userName}}</td>
+            <td>{{this.userEnr}}</td>
+            <td>{{this.itemName}}</td>
+            <td>{{this.itemPrice}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.totalPrice}}</td>
+            <td>{{formatDate orderedAt "DD-MM-YYYY, HH:mm:ss "}}</td>
+            <td>{{modeOfPayment}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    {{/if}}
+    </div>
+    </div>
+  </body>
+</html>

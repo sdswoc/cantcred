@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add new item</title>
+</head>
+<body>
+  
+{{>vendorNavbar}}
+
+
+
+  <div class="container">
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+         <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+     
+     
+        <div class="row">
+        <div class="col xl4 offset-xl4 l4 m8 offset-m2 offset-l4  s12 purple lighten-5" style="border-radius:20px">
+          <div class="row"></div>
+        <div id="add">
+  <form method="POST" action="/vendor/itemadd">
+    <label for="">Item Name</label>
+    <input type="text" name="itemName" id="" required    style=" border-bottom: 1px solid #4a148c " /><br />
+    <label for="">Item Price</label>
+    <input type="number" name="itemPrice" id="" required   style=" border-bottom: 1px solid #4a148c " /><br />
+    <br>
+     <input type="submit"  
+     class="waves-effect waves-light  btn-flat white purple-text text-darken-4" 
+     style="border-radius: 10px; border:solid 1px #4a148c; font-weight:bold"
+     value="ADD ITEM"
+     >
+     
+
+  </form>
+</div>
+        
+            <div class="row"></div>
+        </div>
+        </div>
+        
+      </div>
+
+</body>
+</html>
+

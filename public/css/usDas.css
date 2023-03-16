@@ -1,0 +1,33 @@
+:root {
+    --grey : rgba(49, 49, 49,)
+}
+
+
+
+.main{
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
+
+.header{
+    font-family:Helvetica;
+    font-size: 200%;
+}
+
+/*logo*/
+.responsive-img{
+    width: 15vh;
+    padding-top: 1.5vh;
+}
+
+.first{
+    font-size:100%
+}
+
+.card.hoverable{
+    border: 1px;
+    border-color:blueviolet;
+    border-style: solid;
+    border-radius: 10px;
+    font-weight: bold;
+}

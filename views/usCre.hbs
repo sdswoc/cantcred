@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit</title>
+</head>
+<body>
+  {{>navbar}}
+  <br><br><br><br>
+
+   <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="header" style="font-size: 180%; color:#4a148c ">Your remaining credit is <span style="font-weight: bold;">{{credit}}</span></div>
+    
+    </div>
+    </div>
+    {{#if ord}}
+
+    <div class="header" style="font-size: 180%; color:#4a148c ">Your current pending credits: </div>
+    
+    <table class="purple-text text-darken-2 purple lighten-5" style="border-radius: 15px; font-size:80%">
+      
+        <tr>
+          <th>Vendor</th>
+          <th>Item Name</th>
+          <th>Price </th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Time</th>
+          <th></th>
+        </tr>
+    {{#each ord}}
+     <tr style="border-radius: 15px;">
+      <td>{{vendorName}}</td>
+      <td>{{itemName}}</td>
+      <td>{{itemPrice}}</td>
+      <td>{{quantity}}</td>
+      <td>{{totalPrice}}</td>
+      <td>{{formatDate orderedAt 'DD-MM-YYYY, HH:mm:ss' }}</td>
+      <td>{{>creditbutton}}</td>    
+      </tr>
+    {{/each}}
+    </table>
+    
+    {{/if}}
+ 
+    {{#if pastord}}
+    <div class="row">
+      <div class="row"></div>
+    </div>
+     <div class="header" style="font-size: 180%; color:#4a148c ">Your past credit refills: </div>
+    
+  <table class="purple-text text-darken-2 purple lighten-5" style="border-radius: 15px; font-size:80%">
+    <tr>
+      <th>Item Name</th>
+      <th>Price </th>
+      <th>Quantity</th>
+      <th>Total</th>
+      <th>Date & Time of Order</th>
+      <th>Date & Time of Refill</th>
+    </tr>
+    {{#each pastord}}
+      <tr>
+        <td>{{this.itemName}}</td>
+        <td>{{this.itemPrice}}</td>
+        <td>{{this.quantity}}</td>
+        <td>{{this.totalPrice}}</td>
+        <td>{{formatDate orderedAt "DD-MM-YYYY, HH:mm:ss "}}</td>
+        <td>{{formatDate creditPaidAt "DD-MM-YYYY, HH:mm:ss "}}</td>
+      </tr>
+    {{/each}}
+  </table>
+{{/if}}
+    </div>
+</body>
+</html>

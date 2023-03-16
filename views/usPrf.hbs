@@ -1,0 +1,123 @@
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="../public/css/usPrf.css" />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,-25"
+    />
+  </head>
+  <body>
+    {{>navbar}}
+    <div class="row">
+      <div class="row hide-on-small-only"></div>
+       <div class="row hide-on-small-only"></div>
+
+    </div>
+
+    <div class="container">
+      <br /><br /><br />
+      <div class="row man">
+        <div class="col xl3 l3 m6 s12 hey">
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+          <div class="row hide-on-small-only"></div>
+
+          <div class="name">
+            <i class="small material-icons">account_circle</i>{{user.name}}
+            <br /><br />
+          </div>
+          <div class="content" style="color: #e1bee7 ;">
+            {{user.enr}}<br />
+            {{user.email}}<br />
+            {{user.mob}}<br />
+            <div class="row hide-on-small-only"></div>
+            <div class="row hide-on-small-only"></div>
+            <div class="row hide-on-small-only"></div>
+            <div class="row hide-on-small-only"></div>
+            <div class="row hide-on-small-only"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+          </div>
+          {{credit}}
+          credits left,
+          <a
+            href="http://localhost:4000/users/credit"
+            style="color:#ce93d8  "
+          >refill now?</a>
+          <div class="logout" style="float: right; font-size:100% ; ">
+
+            <a
+              href="http://localhost:4000/users/logout"
+              style="color:white ;  "
+            >
+              <i class="material-icons">exit_to_app</i><span
+                class="logout"
+              >logout</span></a>
+          </div>
+          <div class="previous">
+            view your previous orders
+            <a
+              href="http://localhost:4000/users/orders"
+              style="color: #ce93d8;"
+            >here</a>
+          </div>
+
+        </div>
+
+        <div class="col xl9 l9 m6 s12 hmm">
+          <div class="currord-header">
+            <br />
+            YOU CURRENTLY HAVE
+            <span style="font-weight:bold"> {{currOrdLen}} <span style="font-weight: 400;">ACTIVE ORDERS </span>   </span>
+            <br /><br />
+          </div>
+          <div class="curr">
+            {{#each currOrd}}
+              <div class="table hoverable">
+                <span style="font-weight: bolder;">&nbsp&nbsp<span
+                    class="material-symbols-outlined" style="position:relative ; top:4px;"
+                  >
+                    dinner_dining
+                  </span>{{itemName}}</span>
+                <br />
+                &nbsp&nbsp{{quantity}}
+                x
+                {{itemPrice}}&nbsp&nbsp&nbsp&nbsp || &nbsp&nbsp&nbsp&nbsp
+                {{totalPrice}}
+                &nbsp&nbsp&nbsp&nbsp || &nbsp&nbsp&nbsp&nbsp
+                {{vendorName}}
+              </div>
+              <br />
+            {{/each}}
+          </div>
+
+        </div>
+
+      </div>
+      <br /><br />
+
+    </div>
+
+  </body>
+</html>

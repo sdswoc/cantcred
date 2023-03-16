@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CantCred</title>
+  <link rel="stylesheet"href="../public/css/usDas.css" > 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+</head>
+<body>
+ {{>navbar}}
+</div>
+<br><br>
+<div class="main" style="padding-left:15% ; padding-right:15%; padding-top:20px">
+
+<div class="header purple-text text-darken-4">Welcome aboard , <span style="font-weight:bold;">{{msg}}</span> </div>
+
+<br><br>
+
+<div class="divider"></div>
+<div class="row">
+  <div class="col s12 m6 l6 first">
+    Choose from over 20+ vendors..
+  </div>
+</div>
+
+<div class="row">
+  {{#each vendors}}
+  {{#if stripeExists}}
+  <div class="col s12 m6 l3">
+    <div class="card hoverable">
+      <div class="card-content">
+    <a href="http://localhost:4000/users/menu/?vendorName={{username}}"class="waves-effect waves-light btn-flat white purple-text " style="width:100% ;">
+       <span class="material-symbols-outlined">
+fastfood
+</span>
+       {{username}}</a>
+     </div>
+    </div>
+  </div>
+  {{/if}}
+  {{/each}}
+</div>
+</div>
+</body>
+</html>
+
+
+

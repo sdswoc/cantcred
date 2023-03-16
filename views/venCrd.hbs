@@ -1,0 +1,54 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Transactions</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+  </head>
+  <body>
+    {{>vendorNavbar}}
+    <div class="row"><div class="row"></div></div>
+    <div class="row"></div>
+    <div class="container">
+       
+      <div class="purple darken-1 white-text text-lighten-5" 
+      style="border-top-right-radius: 15px; border-top-left-radius:15px ;  padding:1% 2% 1% 2%;">
+    <span style="font-size: 250%;">Credit Overdue Details</span>
+    </div>
+    
+
+    {{#if ord}}
+      <table style="font-size:67%" class="purple lighten-5">
+        <tr>
+         
+          <th>Name</th>
+          <th>Enrollment</th>
+          <th>Item Name</th>
+          <th>Price </th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+          <th>Date & Time</th>
+        </tr>
+        {{#each ord}}
+          <tr>
+           
+            <td>{{this.userName}}</td>
+            <td>{{this.userEnr}}</td>
+            <td>{{this.itemName}}</td>
+            <td>{{this.itemPrice}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.totalPrice}}</td>
+            <td>{{formatDate orderedAt "DD-MM-YYYY, HH:mm:ss "}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    {{else}}
+      <h4>No Credit Overdue</h4>
+    {{/if}}
+    </div>
+  </body>
+</html>

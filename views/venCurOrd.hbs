@@ -1,0 +1,57 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Cart</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+  </head>
+  <body>
+    <h3>CURRENT ORDERS</h3>
+    <br />
+    <br />
+    {{#if curord}}
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Enrollment</th>
+          <th>Item Name</th>
+          <th>Price </th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Mode of Payment</th>
+        </tr>
+        {{#each curord}}
+          <tr>
+            <td>{{this.userName}}</td>
+            <td>{{this.userEnr}}</td>
+            <td>{{this.itemName}}</td>
+            <td>{{this.itemPrice}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.totalPrice}}</td>
+            <td>{{modeOfPayment}}</td>
+            <td>
+
+              <form
+                action="/vendor/complete/{{_id}}"
+                method="POST"
+                id="complete-item"
+              >
+                <input type="hidden" name="method" value="DELETE" />
+                <button type="submit" class="btn green">delivered</button>
+              </form>
+            </td>
+          </tr>
+        {{/each}}
+      </table>
+    {{/if}}
+  </body>
+</html>
