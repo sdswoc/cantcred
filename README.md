@@ -34,13 +34,13 @@ Cantcred is a web app to connect users and vendors across the R-land for the R-j
 ## Setting up the server 
 
  **Prerequisites** :  Node.js , Git 
- - [ ]  Clone the repository in your desired folder , copy the https url or SSH , you can clone by opening terminal and running the command ` git clone -b <branch name> <repo link> ` 
- - [ ] Open terminal in the directory , run the command  `mv .env.sample .env`
- - [ ]  Open the file .env using any text editor or VS code ,  Put in the channel-i client ID  in **ID** , the secret in **SECRET** , database link in **DB** , session secret in **SCR**, it is preferred to keep the **PORT** at 4000 only , in **SK** put in the stripe key
- - [ ] Open terminal in the directory , run the command `npm i` then after installation of dependencies run the command  `npm start` 
- - [ ] Open another terminal in the same directory , run the command 
+ -  Clone the repository in your desired folder , copy the https url or SSH , you can clone by opening terminal and running the command ` git clone -b <branch name> <repo link> ` 
+ -  Open terminal in the directory , run the command  `mv .env.sample .env`
+ -  Open the file .env using any text editor or VS code ,  Put in the channel-i client ID  in **ID** , the secret in **SECRET** , database link in **DB** , session secret in **SCR**, it is preferred to keep the **PORT** at 4000 only , in **SK** put in the stripe key
+ -  Open terminal in the directory , run the command `npm i` then after installation of dependencies run the command  `npm start` 
+ -  Open another terminal in the same directory , run the command 
  `stripe listen --forward-to localhost:4000/users/webhook`, keep this terminal running
-- [ ] Go to your browser and go to `http://localhost:4000` , you are all set now
+-   Go to your browser and go to `http://localhost:4000` , you are all set now
 
 ## Using the Application 
 
